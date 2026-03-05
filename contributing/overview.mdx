@@ -1,0 +1,270 @@
+---
+title: 'Contributing Overview'
+description: 'Get started contributing to OpenCode Agents — development setup, project structure, and contribution guidelines'
+---
+
+## Welcome Contributors
+
+OpenCode Agents is a curated registry of **69 AI agents** for [OpenCode](https://opencode.ai). All agents are manually evaluated and maintained to ensure high quality. We welcome contributions that improve existing agents, add new ones, or enhance the tooling.
+
+## Development Environment Setup
+
+### Prerequisites
+
+- **Node.js 20+** — for the CLI and TUI
+- **Python 3.10+** — for agent quality scoring and sync scripts
+- **Git** — for version control
+- **Bun** (optional) — for running plugin tests
+
+### Clone the Repository
+
+```bash
+git clone https://github.com/dmicheneau/opencode-template-agent.git
+cd opencode-template-agent
+```
+
+### Install Dependencies
+
+The project uses **zero dependencies** for the CLI. Python scripts use **stdlib only** — no pip packages required.
+
+```bash
+# Verify Node.js version
+node --version  # should be 20+
+
+# Verify Python version
+python3 --version  # should be 3.10+
+```
+
+For plugin development:
+
+```bash
+npm install  # installs @opencode-ai/plugin as dev dependency
+```
+
+## Project Structure
+
+```
+opencode-agents/
+├── agents/              # 69 curated agent markdown files
+│   ├── languages/       # TypeScript, Python, Go, Rust, etc.
+│   ├── ai/              # AI engineering, ML, data science
+│   ├── web/             # React, Next.js, Vue, Angular
+│   ├── data-api/        # API design, databases, GraphQL
+│   ├── devops/          # Docker, Kubernetes, AWS, CI/CD
+│   ├── devtools/        # Code review, debugging, testing
+│   ├── security/        # Security audit, pentesting
+│   ├── mcp/             # MCP server development
+│   ├── business/        # Product management, Scrum
+│   └── docs/            # Technical writing, diagrams
+├── bin/
+│   └── cli.mjs          # CLI entry point
+├── src/
+│   ├── installer.mjs    # Agent download & installation
+│   ├── registry.mjs     # Manifest loading & search
+│   └── tui/             # Interactive TUI components
+│       ├── index.mjs    # TUI orchestrator
+│       ├── screen.mjs   # Terminal I/O
+│       ├── input.mjs    # Keyboard input parser
+│       ├── state.mjs    # State machine
+│       ├── renderer.mjs # ANSI frame builder
+│       └── ansi.mjs     # ANSI escape codes
+├── plugin/
+│   ├── index.ts         # OpenCode plugin entry point
+│   ├── tools.ts         # 4 LLM tools (search, list, get, health)
+│   └── types.d.ts       # TypeScript type definitions
+├── scripts/
+│   ├── quality_scorer.py         # 8-dimension quality scoring
+│   ├── generate_readme_scores.py # README score table generator
+│   ├── sync-agents.py            # Upstream agent discovery
+│   ├── update-manifest.py        # Manifest merge tool
+│   └── sync_common.py            # Shared HTTP & validation utils
+├── tests/
+│   ├── cli.test.mjs     # CLI tests
+│   ├── tui.test.mjs     # TUI tests
+│   ├── lock.test.mjs    # Lock file tests
+│   ├── plugin/          # Plugin tests (Bun)
+│   └── *.py             # Python test suites
+├── .github/workflows/
+│   ├── ci.yml           # Continuous integration
+│   ├── release.yml      # Automated releases
+│   └── sync-agents.yml  # Manual agent sync workflow
+├── manifest.json        # Agent registry metadata
+└── package.json         # npm package configuration
+```
+
+## Key Concepts
+
+### Agent Format
+
+All agents follow a **4-section expert format**:
+
+1. **Identity** — Unheaded paragraph describing the agent's role, expertise, and context
+2. **Decisions** — IF/THEN decision trees for handling different scenarios
+3. **Examples** — Code examples showing the agent in action
+4. **Quality Gate** — Validation criteria before considering work complete
+
+### Quality Scoring
+
+Every agent is evaluated on **8 dimensions** (scale 1-5):
+
+- **Frontmatter** — Description, mode, permission block
+- **Identity** — 50-300 word paragraph
+- **Decisions** — ≥5 IF/THEN rules
+- **Examples** — ≥3 code blocks
+- **Quality Gate** — ≥5 bullet points
+- **Conciseness** — 70-120 lines (body only)
+- **No Banned Sections** — No deprecated headings (Workflow, Tools, Anti-patterns, Collaboration)
+- **Version Pinning** — Versions and years mentioned in identity
+
+**Pass criteria**: Average ≥ 3.5 AND no dimension < 2
+
+### Permissions
+
+Agents use the `permission:` frontmatter field (not the deprecated `tools:` field):
+
+```yaml
+---
+description: "Expert TypeScript developer"
+mode: subagent
+permission:
+  read: allow
+  write: allow
+  edit: allow
+  bash:
+    "*": ask
+  task:
+    "*": allow
+---
+```
+
+## Contributing Workflow
+
+### 1. Find an Issue
+
+Browse [open issues](https://github.com/dmicheneau/opencode-template-agent/issues) or:
+
+- Report a bug with the **Bug Report** template
+- Request a new agent with the **Agent Request** template
+- Suggest an improvement
+
+### 2. Create a Branch
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/bug-description
+```
+
+### 3. Make Changes
+
+- Edit existing agents in `agents/<category>/`
+- Add new agents following the 4-section format
+- Update tests if modifying core functionality
+- Run quality scorer to verify agent quality
+
+### 4. Test Locally
+
+See [Testing](/contributing/testing) for detailed test commands.
+
+```bash
+# Run all tests
+npm test                    # Node.js tests
+python3 tests/run_tests.py  # Python tests
+bun test tests/plugin/      # Plugin tests
+
+# Score a specific agent
+python3 scripts/quality_scorer.py agents/languages/typescript-pro.md
+
+# Regenerate README scores
+python3 scripts/generate_readme_scores.py
+```
+
+### 5. Commit Changes
+
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```bash
+git add .
+git commit -m "feat: add zig-pro agent for systems programming"
+git commit -m "fix: correct permission field in python-pro agent"
+git commit -m "docs: update contributing guide with quality criteria"
+```
+
+Commit prefixes:
+- `feat` — New feature
+- `fix` — Bug fix
+- `docs` — Documentation only
+- `refactor` — Code restructuring
+- `test` — Add or modify tests
+- `chore` — Maintenance tasks
+
+### 6. Push and Open PR
+
+```bash
+git push origin feature/your-feature-name
+```
+
+Open a Pull Request on GitHub following the PR template. The CI will automatically:
+
+- Run 893 tests across Node.js and Python
+- Lint code for syntax errors
+- Validate YAML frontmatter in all agents
+- Verify manifest.json integrity
+- Check that README scores are up to date
+- Ensure no deprecated `tools:` fields exist
+
+## CI/CD Pipeline
+
+### Continuous Integration (`.github/workflows/ci.yml`)
+
+Triggered on every push and PR to `main`. Runs 4 jobs in parallel:
+
+| Job | Description |
+|-----|-------------|
+| **test** | Python tests on versions 3.10, 3.12, 3.13 |
+| **test-cli** | Node.js tests on versions 20, 22, 23 (CLI, TUI, lock) |
+| **lint** | Syntax validation (Python, Node.js, shellcheck), YAML frontmatter, manifest.json, README score freshness |
+| **validate-agents** | Manifest-to-file consistency, deprecated field detection |
+
+**Total test count**: 893 tests (560 JS + 23 plugin TS + 310 Python)
+
+### Release Workflow (`.github/workflows/release.yml`)
+
+Automated release creation when a version tag is pushed:
+
+```bash
+# Bump version and tag
+npm version major  # or minor, patch
+git push --follow-tags
+
+# Or manually
+git tag v8.3.0
+git push --tags
+```
+
+Uses [git-cliff](https://git-cliff.org) to generate a structured changelog from commit history.
+
+### Sync Agents Workflow (`.github/workflows/sync-agents.yml`)
+
+**Manual dispatch only** — no automatic syncing. Used for discovering new agents from upstream sources, but all agents are manually curated before integration.
+
+## Code of Conduct
+
+This project follows the [Contributor Covenant](https://github.com/dmicheneau/opencode-template-agent/blob/main/CODE_OF_CONDUCT.md). Be respectful, inclusive, and constructive.
+
+## Getting Help
+
+- **Questions?** Open a [GitHub Discussion](https://github.com/dmicheneau/opencode-template-agent/discussions)
+- **Bugs?** File an [issue](https://github.com/dmicheneau/opencode-template-agent/issues/new?template=bug_report.md)
+- **Agent requests?** Use the [Agent Request template](https://github.com/dmicheneau/opencode-template-agent/issues/new?template=agent_request.md)
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Adding Agents" icon="plus" href="/contributing/adding-agents">
+    Learn the 4-section format and quality requirements
+  </Card>
+  <Card title="Testing" icon="flask" href="/contributing/testing">
+    Run tests and validate your changes
+  </Card>
+</CardGroup>

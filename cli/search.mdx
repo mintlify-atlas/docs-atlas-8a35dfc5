@@ -1,0 +1,191 @@
+---
+title: "search"
+description: "Search agents by name, description, tags, or category"
+---
+
+Search the registry for agents matching a query. Searches across agent names, descriptions, tags, and categories.
+
+## Usage
+
+<CodeGroup>
+```bash npm
+npx opencode-agents search <query>
+```
+
+```bash npx
+npx github:dmicheneau/opencode-template-agent search <query>
+```
+
+```bash yarn
+yarn dlx opencode-agents search <query>
+```
+</CodeGroup>
+
+## How It Works
+
+The search is case-insensitive and matches against:
+1. **Agent name** — e.g., `typescript-pro`, `postgres-pro`
+2. **Description** — Brief summary of agent expertise
+3. **Category** — e.g., `languages`, `devops`, `security`
+4. **Tags** — Keywords like `docker`, `kubernetes`, `react`, `api`, `testing`
+
+Results are returned in manifest order (not ranked by relevance).
+
+## Examples
+
+### Search by technology
+
+```bash
+npx opencode-agents search docker
+```
+
+**Output:**
+```
+Found 2 agent(s) matching "docker":
+
+  docker-specialist (devops)
+  → Multi-stage builds, BuildKit, networking, volumes, and security best practices
+
+  platform-engineer (devops)
+  → Internal platforms, developer experience, self-service infra, and golden paths
+```
+
+### Search by language
+
+```bash
+npx opencode-agents search typescript
+```
+
+**Output:**
+```
+Found 4 agent(s) matching "typescript":
+
+  typescript-pro (languages)
+  → Modern TypeScript with strict mode, generics, and type safety
+
+  nextjs-developer (web)
+  → Next.js 15+ with App Router, RSC, and streaming SSR
+
+  react-specialist (web)
+  → Modern React with hooks, context, Suspense, and composition patterns
+
+  fullstack-developer (web)
+  → Full-stack applications with modern frameworks and best practices
+```
+
+### Search by domain
+
+```bash
+npx opencode-agents search security
+```
+
+**Output:**
+```
+Found 6 agent(s) matching "security":
+
+  security-auditor (security)
+  → Code security reviews, OWASP Top 10, dependency scanning, and threat modeling
+
+  penetration-tester (security)
+  → Offensive security, vulnerability research, exploit development, and red teaming
+
+  smart-contract-auditor (security)
+  → Solidity audits, reentrancy, access control, and DeFi security patterns
+
+  compliance-auditor (security)
+  → Regulatory compliance, SOC 2, ISO 27001, GDPR, and audit trails
+
+  security-engineer (security)
+  → Application security, secure SDLC, secrets management, and security architecture
+
+  mcp-security-auditor (mcp)
+  → MCP server security review, permission validation, and supply-chain checks
+```
+
+### Search by workflow
+
+```bash
+npx opencode-agents search testing
+```
+
+**Output:**
+```
+Found 3 agent(s) matching "testing":
+
+  test-automator (devtools)
+  → Test strategy, coverage, mocking, fixtures, and CI integration
+
+  qa-expert (devtools)
+  → Quality assurance, test plans, edge cases, and acceptance criteria
+
+  penetration-tester (security)
+  → Offensive security, vulnerability research, exploit development, and red teaming
+```
+
+### Search multi-word queries
+
+```bash
+npx opencode-agents search "machine learning"
+```
+
+**Output:**
+```
+Found 5 agent(s) matching "machine learning":
+
+  ai-engineer (ai)
+  → End-to-end AI systems from model selection to production deployment
+
+  ml-engineer (ai)
+  → ML pipelines, model training, hyperparameter tuning, and deployment
+
+  mlops-engineer (ai)
+  → Production ML infrastructure, experiment tracking, model registry, and monitoring
+
+  data-scientist (ai)
+  → Statistical modeling, feature engineering, and experiment design
+
+  llm-architect (ai)
+  → LLM application design, prompt engineering, RAG, and fine-tuning
+```
+
+## No Results
+
+If no agents match the query, the CLI displays:
+
+```bash
+npx opencode-agents search foobar
+# No agents found matching "foobar".
+```
+
+Try:
+- Broadening your search (e.g., `api` instead of `rest-api`)
+- Searching by category name (e.g., `devops`, `languages`, `security`)
+- Using [list](/cli/list) to browse all agents
+- Using [tui](/cli/tui) for interactive exploration
+
+## Search Tips
+
+<Tip>
+**Partial matching:** The search uses substring matching, so `kube` will match `kubernetes-specialist`.
+</Tip>
+
+<Tip>
+**Category shortcuts:** Search by category name (e.g., `devops`, `languages`) to see all agents in that category.
+</Tip>
+
+<Tip>
+**Technology stack:** Search by framework or tool name (e.g., `react`, `postgres`, `terraform`) to find specialized agents.
+</Tip>
+
+## Output Format
+
+Each result shows:
+- **Agent name** — Used in `install <name>` commands
+- **Category** — In parentheses (e.g., `(devops)`, `(security)`)
+- **Description** — Brief summary of expertise
+
+## Related Commands
+
+- [list](/cli/list) — Browse all agents by category
+- [install](/cli/install) — Install agents after searching
+- [tui](/cli/tui) — Visual search and browsing interface

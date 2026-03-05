@@ -1,0 +1,184 @@
+---
+title: "list"
+description: "List all available agents or packs"
+---
+
+Display all agents in the registry, grouped by category, or list available packs.
+
+## Usage
+
+<CodeGroup>
+```bash npm
+npx opencode-agents list
+```
+
+```bash npx
+npx github:dmicheneau/opencode-template-agent list
+```
+
+```bash yarn
+yarn dlx opencode-agents list
+```
+</CodeGroup>
+
+## Default Behavior
+
+Without flags, `list` displays all 69 agents grouped by category:
+
+```bash
+npx opencode-agents list
+```
+
+**Example output:**
+
+```
+opencode-agents v1.0.0 — 69 agents available
+
+💻 Languages (11 agents)
+  typescript-pro       — Modern TypeScript with strict mode, generics, and type safety
+  python-pro           — Python 3.12+ with type hints, async patterns, and dataclasses
+  golang-pro           — Idiomatic Go with interfaces, goroutines, and error handling
+  rust-pro             — Memory-safe Rust with ownership, lifetimes, and zero-cost abstractions
+  java-architect       — Enterprise Java with Spring Boot, Maven, and microservices
+  ...
+
+🤖 AI & Machine Learning (9 agents)
+  ai-engineer          — End-to-end AI systems from model selection to production deployment
+  data-scientist       — Statistical modeling, feature engineering, and experiment design
+  ml-engineer          — ML pipelines, model training, hyperparameter tuning, and deployment
+  ...
+
+🌐 Web & Mobile (9 agents)
+  react-specialist     — Modern React with hooks, context, Suspense, and composition patterns
+  nextjs-developer     — Next.js 15+ with App Router, RSC, and streaming SSR
+  ...
+
+[... 7 more categories ...]
+```
+
+Each agent entry shows:
+- **Name** — Used in `install <name>` commands
+- **Description** — Brief summary of expertise
+
+## List Packs
+
+Use the `--packs` flag to display all predefined packs:
+
+```bash
+npx opencode-agents list --packs
+```
+
+**Example output:**
+
+```
+opencode-agents v1.0.0 — 15 packs available
+
+📦 backend (8 agents)
+   Stack backend: API, database, Redis, TypeScript, Python, debugging, testing
+   Agents: postgres-pro, redis-specialist, database-architect, api-architect,
+           python-pro, typescript-pro, debugger, test-automator
+
+📦 frontend (6 agents)
+   Stack frontend: React, Next.js, UI design, performance, testing
+   Agents: react-specialist, nextjs-developer, typescript-pro, ui-designer,
+           performance-engineer, test-automator
+
+📦 devops (9 agents)
+   Infrastructure: containers, orchestration, IaC, CI/CD, incident response
+   Agents: docker-specialist, kubernetes-specialist, terraform-specialist,
+           aws-specialist, ci-cd-engineer, linux-admin, platform-engineer,
+           sre-engineer, incident-responder
+
+[... 12 more packs ...]
+```
+
+Each pack shows:
+- **Name** — Used in `install --pack <name>` commands
+- **Agent count** — Number of agents in the pack
+- **Description** — Purpose and use case
+- **Agents list** — All included agents
+
+## Available Packs
+
+| Pack | Agents | Description |
+|------|--------|-------------|
+| `backend` | 8 | TypeScript, Python, PostgreSQL, Redis, API design, debugging, testing |
+| `frontend` | 6 | React, Next.js, TypeScript, UI design, performance, testing |
+| `fullstack` | 9 | Full-stack dev, React, Next.js, PostgreSQL, API design, code review |
+| `devops` | 9 | Docker, Kubernetes, Terraform, AWS, CI/CD, Linux, incident response |
+| `ai` | 6 | AI engineering, data science, ML, LLMs, prompts, search |
+| `security` | 5 | Security auditing, penetration testing, smart contracts, compliance |
+| `mcp` | 2 | MCP server development and security auditing |
+| `quality` | 6 | Code review, testing, debugging, performance, refactoring, legacy modernization |
+| `startup` | 8 | Full-stack, TypeScript, Next.js, PostgreSQL, Docker, product management, UI design, testing |
+| `data-stack` | 6 | Data engineering, analytics, database architecture, PostgreSQL, SQL |
+| `ml-to-production` | 6 | Data science, ML engineering, MLOps, LLMs, Docker, Kubernetes |
+| `frontend-complete` | 6 | React, Next.js, Vue, Angular, accessibility, UI design |
+| `ship-it-safely` | 6 | CI/CD, Docker, Kubernetes, SRE, security, QA |
+| `product-discovery` | 5 | Product management, UX research, business analysis, PRD, UI design |
+| `architecture-docs` | 5 | Microservices, API design, database architecture, diagrams, documentation |
+
+## Available Categories
+
+| Category | Icon | Agents | Description |
+|----------|------|--------|-------------|
+| `languages` | 💻 | 11 | TypeScript, Python, Go, Rust, Java, C#, PHP, Kotlin, C++, Rails, Swift |
+| `ai` | 🤖 | 9 | AI engineering, data science, ML, MLOps, LLMs, prompts, search |
+| `web` | 🌐 | 9 | React, Next.js, Vue, Angular, mobile, UI design, accessibility |
+| `data-api` | 🗄️ | 6 | API design, GraphQL, database architecture, PostgreSQL, Redis, SQL |
+| `devops` | ⚙️ | 9 | Docker, Kubernetes, Terraform, AWS, CI/CD, Linux, platform, SRE, incident response |
+| `devtools` | 🛠️ | 8 | Code review, debugging, performance, refactoring, testing, microservices, QA, legacy modernization |
+| `security` | 🔒 | 5 | Security auditing, penetration testing, smart contracts, compliance |
+| `mcp` | 🔌 | 2 | MCP server development, MCP security auditing |
+| `business` | 📊 | 6 | Product management, project management, PRD, Scrum, UX research, business analysis |
+| `docs` | 📝 | 4 | Technical writing, API docs, documentation engineering, diagrams |
+
+## Flags
+
+<ParamField path="--packs" type="boolean" default="false">
+  Display available packs instead of agents. Packs are curated collections of agents for specific workflows.
+
+  ```bash
+  npx opencode-agents list --packs
+  ```
+</ParamField>
+
+## Examples
+
+### List all agents
+
+```bash
+npx opencode-agents list
+# Shows all 69 agents grouped by 10 categories
+```
+
+### List all packs
+
+```bash
+npx opencode-agents list --packs
+# Shows 15 predefined packs with agent counts and descriptions
+```
+
+### Pipe to grep for filtering
+
+```bash
+# Find all agents related to TypeScript
+npx opencode-agents list | grep -i typescript
+# typescript-pro       — Modern TypeScript with strict mode, generics, and type safety
+
+# Find all agents in the security category
+npx opencode-agents list | grep -A 10 "Security"
+```
+
+## Output Format
+
+The output is plain text formatted for terminal display:
+- **Category headers** — Bold with emoji icons
+- **Agent names** — Left-aligned, followed by description
+- **Pack headers** — Bold with 📦 icon and agent count
+
+## Related Commands
+
+- [search](/cli/search) — Search agents by keyword
+- [install](/cli/install) — Install agents, packs, or categories
+- [tui](/cli/tui) — Interactive browser with visual navigation

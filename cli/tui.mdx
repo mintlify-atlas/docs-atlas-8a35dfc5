@@ -1,0 +1,228 @@
+---
+title: "tui"
+description: "Interactive terminal interface for browsing and installing agents"
+---
+
+Launch a full-screen interactive browser for exploring and installing agents. The TUI (Terminal User Interface) provides visual navigation, search, and batch installation.
+
+## Usage
+
+<CodeGroup>
+```bash npm
+npx opencode-agents tui
+```
+
+```bash npx
+npx github:dmicheneau/opencode-template-agent tui
+```
+
+```bash yarn
+yarn dlx opencode-agents tui
+```
+</CodeGroup>
+
+## Auto-launch
+
+If you run the CLI without any command and your terminal supports TTY, the TUI launches automatically:
+
+```bash
+npx opencode-agents
+# Automatically launches TUI in interactive terminals
+```
+
+In non-interactive environments (CI/CD, pipes), the CLI shows help text instead.
+
+## Features
+
+### Visual Navigation
+
+- **Category tabs** — Browse agents by category with keyboard or mouse
+- **Color-coded** — Each category has a unique color for quick identification
+- **Agent cards** — Name, description, tags, and install status
+- **Status indicators** — ✓ installed, ⚠ outdated, ○ not installed
+
+### Keyboard Controls
+
+| Key | Action |
+|-----|--------|
+| `↑` / `↓` | Navigate agent list |
+| `←` / `→` | Switch category tabs |
+| `Tab` | Next category tab |
+| `Space` | Toggle agent selection |
+| `Enter` | Install selected agents |
+| `/` | Open search |
+| `p` | View pack details |
+| `q` / `Esc` | Quit or cancel |
+| `h` / `?` | Show help |
+
+### Mouse Support
+
+- **Click tabs** — Switch categories
+- **Click agents** — Select for installation
+- **Scroll** — Navigate long lists
+- **Click buttons** — Install, cancel, quit
+
+### Search Mode
+
+Press `/` to enter search:
+
+1. Type your query (e.g., `docker`, `typescript`, `security`)
+2. Results appear in real-time
+3. Navigate with `↑` / `↓`
+4. `Space` to select, `Enter` to install
+5. `Esc` to return to browse mode
+
+Search matches agent names, descriptions, tags, and categories.
+
+### Pack Explorer
+
+Press `p` to view predefined packs:
+
+1. Browse packs with `↑` / `↓`
+2. `Enter` to view pack details (agent list)
+3. `Space` to select entire pack
+4. `Enter` again to install all agents in pack
+5. `Esc` to return to main view
+
+### Installation States
+
+Each agent shows its current state:
+
+| Icon | State | Description |
+|------|-------|-------------|
+| ✓ | Installed | File exists and hash matches lock |
+| ⚠ | Outdated | File exists but hash mismatch |
+| ○ | Not installed | File does not exist |
+| ? | Unknown | File exists but no lock entry |
+
+## Flags
+
+<ParamField path="--force" type="boolean" default="false">
+  Overwrite existing agent files during installation. By default, the TUI skips already-installed agents.
+
+  ```bash
+  npx opencode-agents tui --force
+  ```
+</ParamField>
+
+## Workflow Example
+
+### 1. Launch TUI
+
+```bash
+npx opencode-agents tui
+```
+
+### 2. Browse categories
+
+```
+┌─ OpenCode Agents ─────────────────────────────────────────┐
+│ 💻 Languages │ 🤖 AI │ 🌐 Web │ 🗄️ Data │ ⚙️ DevOps │ ... │
+├───────────────────────────────────────────────────────────┤
+│                                                           │
+│  ✓ typescript-pro                                        │
+│    Modern TypeScript with strict mode, generics, and     │
+│    type safety                                            │
+│    Tags: typescript, types, generics, strict             │
+│                                                           │
+│  ○ python-pro                                            │
+│    Python 3.12+ with type hints, async patterns, and     │
+│    dataclasses                                            │
+│    Tags: python, async, typing, dataclasses              │
+│                                                           │
+│  ⚠ golang-pro                                            │
+│    Idiomatic Go with interfaces, goroutines, and error   │
+│    handling                                               │
+│    Tags: go, golang, concurrency, interfaces             │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│ ↑↓ Navigate │ Space: Select │ Enter: Install │ /: Search │
+│ ←→ Tabs │ p: Packs │ q: Quit                             │
+└───────────────────────────────────────────────────────────┘
+```
+
+### 3. Select agents
+
+Press `Space` to toggle selection (✓ indicator appears next to agent name).
+
+### 4. Install
+
+Press `Enter` to install all selected agents. The TUI shows progress:
+
+```
+Installing 3 agents...
+
+✓ python-pro → .opencode/agents/languages/python-pro.md
+✓ golang-pro → .opencode/agents/languages/golang-pro.md (forced)
+✓ rust-pro → .opencode/agents/languages/rust-pro.md
+
+3 installed, 0 skipped, 0 failed
+
+Press any key to continue...
+```
+
+### 5. Search mode
+
+Press `/` and type `docker`:
+
+```
+┌─ Search: docker ──────────────────────────────────────────┐
+│                                                           │
+│  ○ docker-specialist (devops)                            │
+│    Multi-stage builds, BuildKit, networking, volumes,    │
+│    and security best practices                            │
+│                                                           │
+│  ○ platform-engineer (devops)                            │
+│    Internal platforms, developer experience, self-       │
+│    service infra, and golden paths                        │
+│                                                           │
+├───────────────────────────────────────────────────────────┤
+│ Found 2 agents                                            │
+│ Esc: Cancel │ ↑↓: Navigate │ Space: Select │ Enter: Install │
+└───────────────────────────────────────────────────────────┘
+```
+
+## Color Palette
+
+Each category has a distinct color:
+
+| Category | Color |
+|----------|-------|
+| Languages | Blue |
+| AI | Purple |
+| Web | Cyan |
+| Data & API | Green |
+| DevOps | Orange |
+| DevTools | Yellow |
+| Security | Red |
+| MCP | Magenta |
+| Business | Teal |
+| Docs | Gray |
+
+## Requirements
+
+- **Node.js 20+** — Required for native ESM and built-in modules
+- **TTY terminal** — The TUI requires an interactive terminal (not pipes or redirects)
+- **UTF-8 encoding** — For box-drawing characters and emoji icons
+- **ANSI support** — For colors and cursor control
+
+<Info>
+The TUI automatically detects TTY support. If your terminal doesn't support interactive mode, the CLI falls back to showing help text.
+</Info>
+
+## Architecture
+
+The TUI is built with zero npm dependencies using Node.js built-ins:
+
+- **index.mjs** — Lifecycle orchestration, main loop, signal handling
+- **screen.mjs** — Terminal I/O (raw mode, flush, resize, input handling)
+- **input.mjs** — Byte stream parser (raw bytes → ~20 action types)
+- **state.mjs** — State machine (browse, search, confirm, installing, done, quit)
+- **renderer.mjs** — Frame builder (state → ANSI string)
+- **ansi.mjs** — ANSI codes, colors, box drawing, palettes
+
+## Related Commands
+
+- [list](/cli/list) — Non-interactive agent listing
+- [search](/cli/search) — Command-line search
+- [install](/cli/install) — Direct installation without TUI

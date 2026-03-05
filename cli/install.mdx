@@ -1,0 +1,280 @@
+---
+title: "install"
+description: "Install agents from the OpenCode registry"
+---
+
+Install one or more agents from the registry. Agents are downloaded from GitHub and written to `.opencode/agents/` in your project.
+
+## Usage
+
+<CodeGroup>
+```bash npm
+npx opencode-agents install <agent>
+```
+
+```bash npx
+npx github:dmicheneau/opencode-template-agent install <agent>
+```
+
+```bash yarn
+yarn dlx opencode-agents install <agent>
+```
+</CodeGroup>
+
+## Install Modes
+
+### Single Agent
+
+Install a specific agent by name:
+
+```bash
+npx opencode-agents install typescript-pro
+```
+
+The CLI will:
+- Validate the agent name exists in the registry
+- Download the agent from GitHub raw content
+- Write to `.opencode/agents/<category>/<name>.md` (or root for primary agents)
+- Skip if already installed (unless `--force` is used)
+- Provide fuzzy search suggestions if the name is misspelled
+
+### Category Mode
+
+Install all agents from one or more categories:
+
+```bash
+# Single category
+npx opencode-agents install --category languages
+
+# Multiple categories (comma or space separated)
+npx opencode-agents install --category languages,devops
+npx opencode-agents install --category languages devops
+```
+
+**Available categories:** `languages`, `ai`, `web`, `data-api`, `devops`, `devtools`, `security`, `mcp`, `business`, `docs`
+
+### Pack Mode
+
+Install a predefined pack of agents:
+
+```bash
+# Single pack
+npx opencode-agents install --pack backend
+
+# Multiple packs
+npx opencode-agents install --pack backend,devops
+```
+
+Packs are curated collections designed for specific workflows. See [list --packs](/cli/list#list-packs) for available packs.
+
+**Example packs:**
+- `backend` — TypeScript, Python, PostgreSQL, Redis, API design, debugging, testing (8 agents)
+- `frontend` — React, Next.js, TypeScript, UI design, performance, testing (6 agents)
+- `fullstack` — Full-stack dev, React, Next.js, PostgreSQL, API design, code review (9 agents)
+- `devops` — Docker, Kubernetes, Terraform, AWS, CI/CD, Linux, incident response (9 agents)
+- `ai` — AI engineering, data science, ML, LLMs, prompts, search (6 agents)
+
+### Install All
+
+Install every agent in the registry (69 agents):
+
+```bash
+npx opencode-agents install --all
+```
+
+<Warning>
+This installs all 69 agents. Consider using packs or categories for a more focused setup.
+</Warning>
+
+### Update Mode
+
+Reinstall only agents whose installed file hash doesn't match the lock file:
+
+```bash
+npx opencode-agents install --update
+```
+
+This compares the SHA-256 hash of each installed agent with the hash recorded in `.opencode/agents/.manifest-lock.json`. Only agents with mismatched hashes are reinstalled (forced overwrite).
+
+See also: [update command](/cli/update) (standalone alias)
+
+## Flags
+
+<ParamField path="--force" type="boolean" default="false">
+  Overwrite existing agent files without prompting. By default, the CLI skips agents that are already installed.
+
+  ```bash
+  npx opencode-agents install postgres-pro --force
+  ```
+</ParamField>
+
+<ParamField path="--dry-run" type="boolean" default="false">
+  Preview what would be installed without writing any files to disk. Useful for testing pack or category installations.
+
+  ```bash
+  npx opencode-agents install --pack backend --dry-run
+  ```
+</ParamField>
+
+<ParamField path="--update" type="boolean" default="false">
+  Reinstall only outdated agents (hash mismatch). Mutually exclusive with `--all`, `--pack`, and `--category`.
+
+  ```bash
+  npx opencode-agents install --update
+  ```
+</ParamField>
+
+## Permission Flags
+
+Control agent permissions via presets or granular overrides. Permissions are embedded in agent frontmatter and control tool access (bash, read, write, etc.).
+
+<ParamField path="--permissions" type="string" default="balanced">
+  Apply a permission preset to all agents:
+  - `strict` — Deny bash, allow read-only operations
+  - `balanced` — Ask for bash, allow most read/write operations (default)
+  - `permissive` — Allow bash, allow all operations
+  - `yolo` — Allow everything, no confirmation (requires typing CONFIRM)
+
+  ```bash
+  npx opencode-agents install --pack devops --permissions permissive
+  ```
+</ParamField>
+
+<ParamField path="--yolo" type="boolean" default="false">
+  Set all permissions to `allow` without confirmation prompts. Requires typing `CONFIRM` at runtime for safety. Equivalent to `--permissions yolo`.
+
+  ```bash
+  npx opencode-agents install postgres-pro --yolo
+  # Prompt: Type CONFIRM to enable YOLO mode:
+  ```
+</ParamField>
+
+<ParamField path="--permission-override" type="string">
+  Override a specific permission for all agents or a single agent. Format: `[agent:]permission=action`
+
+  **Valid permissions:** `bash`, `read`, `write`, `edit`, `glob`, `grep`, `webfetch`, `task`, `mcp`, `alarm`
+
+  **Valid actions:** `allow`, `ask`, `deny`
+
+  ```bash
+  # Deny bash for all agents
+  npx opencode-agents install --pack backend --permission-override bash=deny
+
+  # Allow write only for postgres-pro
+  npx opencode-agents install postgres-pro --permission-override postgres-pro:write=allow
+  ```
+
+  Can be specified multiple times:
+  ```bash
+  npx opencode-agents install --pack devops \
+    --permission-override bash=allow \
+    --permission-override write=ask
+  ```
+</ParamField>
+
+<ParamField path="--save-permissions" type="boolean" default="false">
+  Save the permission preset and overrides as default for future installs. Preferences are stored in `.opencode/agents/.permissions.json`.
+
+  ```bash
+  npx opencode-agents install --permissions strict --save-permissions
+  ```
+</ParamField>
+
+<ParamField path="--no-saved-permissions" type="boolean" default="false">
+  Ignore saved permission preferences from `.opencode/agents/.permissions.json`. Use CLI flags only.
+
+  ```bash
+  npx opencode-agents install postgres-pro --no-saved-permissions
+  ```
+</ParamField>
+
+<ParamField path="--no-interactive" type="boolean" default="false">
+  Skip the interactive permission editor (if implemented in future versions). Currently reserved for non-interactive CI/CD workflows.
+
+  ```bash
+  npx opencode-agents install --pack backend --no-interactive --permissions permissive
+  ```
+</ParamField>
+
+## Mutual Exclusivity
+
+These flags cannot be combined in a single command:
+
+- `--all` + `--pack`
+- `--all` + `--category`
+- `--pack` + `--category`
+- `--update` + any of the above
+
+The CLI will exit with an error if you attempt to combine them.
+
+## Examples
+
+### Install a single agent
+
+```bash
+npx opencode-agents install typescript-pro
+# ✓ typescript-pro → .opencode/agents/languages/typescript-pro.md
+```
+
+### Install a pack with custom permissions
+
+```bash
+npx opencode-agents install --pack devops --permissions permissive
+# Installing pack "devops" (9 agents)...
+# ✓ docker-specialist → .opencode/agents/devops/docker-specialist.md
+# ✓ kubernetes-specialist → .opencode/agents/devops/kubernetes-specialist.md
+# ...
+```
+
+### Install multiple categories
+
+```bash
+npx opencode-agents install --category languages,data-api --dry-run
+# Dry run — no files will be written
+#
+# Installing 17 agents from categories "languages", "data-api"...
+# [dry-run] typescript-pro → .opencode/agents/languages/typescript-pro.md
+# [dry-run] python-pro → .opencode/agents/languages/python-pro.md
+# ...
+```
+
+### Update outdated agents
+
+```bash
+npx opencode-agents install --update
+# Updating 3 outdated agent(s)...
+#   → postgres-pro — hash mismatch, reinstalling
+#   → redis-specialist — hash mismatch, reinstalling
+#   → typescript-pro — hash mismatch, reinstalling
+#
+# ✓ postgres-pro (forced overwrite)
+# ✓ redis-specialist (forced overwrite)
+# ✓ typescript-pro (forced overwrite)
+#
+# 3 installed, 0 skipped, 0 failed
+```
+
+### Deny bash for security-sensitive packs
+
+```bash
+npx opencode-agents install --pack security \
+  --permission-override bash=deny \
+  --save-permissions
+# Installing pack "security" (5 agents)...
+# Permissions saved to .opencode/agents/.permissions.json
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|----------|
+| `0` | All agents installed successfully (or skipped) |
+| `1` | One or more agents failed to install, or validation error |
+
+## Related Commands
+
+- [list](/cli/list) — List all available agents
+- [search](/cli/search) — Search agents by name or description
+- [update](/cli/update) — Reinstall outdated agents
+- [uninstall](/cli/uninstall) — Remove installed agents
+- [verify](/cli/verify) — Check lock file integrity

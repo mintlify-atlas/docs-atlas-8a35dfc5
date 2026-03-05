@@ -1,0 +1,297 @@
+---
+title: Lock File System
+description: SHA-256 integrity verification for installed agents
+---
+
+The lock system tracks installed agent content with SHA-256 hashes to detect modifications. It's designed for **change detection**, not supply-chain security — the download source is trusted via HTTPS + host allowlist.
+
+## Lock File Format
+
+Installed agents are tracked in `.opencode/agents/.manifest-lock.json`:
+
+```json
+{
+  "typescript-pro": {
+    "sha256": "a3f2e1b9c4d5...",
+    "installedAt": "2026-01-15T10:30:00Z",
+    "updatedAt": "2026-02-10T14:22:00Z"
+  },
+  "postgres-pro": {
+    "sha256": "d9e8f7a6b5c4...",
+    "installedAt": "2026-01-20T09:15:00Z",
+    "updatedAt": "2026-01-20T09:15:00Z",
+    "relativePath": "data-api/postgres-pro.md"
+  }
+}
+```
+
+### Entry Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `sha256` | string | Hex digest of file content (required) |
+| `installedAt` | ISO 8601 | First install timestamp |
+| `updatedAt` | ISO 8601 | Last modification timestamp |
+| `relativePath` | string | Path within agents dir (optional, for subagents) |
+
+## How Hashing Works
+
+### Installation
+
+When you install an agent:
+
+1. Download content from registry
+2. Apply permission modifications (if any)
+3. Compute SHA-256 hash of **final content**
+4. Write agent file to disk
+5. Record hash in lock file
+
+**Critical:** The hash is computed *after* permission modifications. This means:
+- Reinstalling with different permissions updates the hash
+- `rehash` won't flag permission changes as modifications
+- The lock tracks what you installed, not what's in the registry
+
+### Agent States
+
+The lock system detects four agent states:
+
+| State | Condition | What it means |
+|-------|-----------|---------------|
+| `installed` | File exists, hash matches lock | Agent is current |
+| `outdated` | File exists, hash differs | File was modified since install |
+| `new` | File missing | Agent not installed yet |
+| `unknown` | File exists, no lock entry | Manual install or pre-lock version |
+
+## CLI Commands
+
+### Verify Integrity
+
+Check installed files against lock hashes:
+
+```bash
+npx opencode-agents verify
+```
+
+Output:
+
+```
+Lock integrity verification
+  ✓ 15 agent(s) OK
+    • typescript-pro
+    • postgres-pro
+    ...
+  ✗ 2 agent(s) with hash mismatch
+    • redis-specialist
+    • docker-specialist
+  ⚠ 1 agent(s) missing from disk
+    • old-agent
+```
+
+- **OK**: Hash matches, no changes
+- **Mismatch**: File modified since install (or permissions changed)
+- **Missing**: Lock entry exists but file deleted
+
+Exit code:
+- `0` if all OK
+- `1` if any mismatches or missing files
+
+### Rehash Lock File
+
+Rebuild lock from installed files:
+
+```bash
+npx opencode-agents rehash
+```
+
+This:
+1. Scans `.opencode/agents/` for all `.md` files
+2. Recomputes SHA-256 for each
+3. Overwrites lock file with fresh entries
+4. Sets `installedAt` and `updatedAt` to current time
+
+**Use cases:**
+- Fixing a corrupted lock file
+- Adopting lock system after pre-lock installs
+- Resetting after manual agent edits
+
+**Warning:** This trusts current disk state. If an agent was tampered with, `rehash` makes that the new baseline.
+
+### Update Outdated Agents
+
+Reinstall agents with hash mismatches:
+
+```bash
+# Find and reinstall outdated agents
+npx opencode-agents install --update
+
+# Or use the alias
+npx opencode-agents update
+```
+
+This:
+1. Runs `detectAgentStates()` to find `outdated` agents
+2. Downloads fresh copies from registry
+3. Installs with `--force` to overwrite
+4. Updates lock file with new hashes
+
+## Outdated Agent Detection
+
+The lock system powers the `--update` workflow:
+
+```javascript
+import { findOutdatedAgents } from './lock.mjs';
+import { getManifest } from './registry.mjs';
+
+const manifest = getManifest();
+const outdated = findOutdatedAgents(manifest);
+
+console.log(`Found ${outdated.length} outdated agents:`);
+for (const agent of outdated) {
+  console.log(`  - ${agent.name}`);
+}
+```
+
+## Lock File Integrity
+
+### Corruption Handling
+
+If `.manifest-lock.json` exists but is corrupted (invalid JSON):
+
+1. Warning printed to stderr
+2. Lock file backed up to `.manifest-lock.json.bak`
+3. Empty lock object returned
+4. Next install writes fresh lock
+
+### Security Validation
+
+Lock entries are validated on load:
+
+- **Entry shape**: Must have `sha256` string
+- **Agent names**: Must match `SAFE_NAME_RE` (alphanumeric, hyphens, underscores)
+- **Relative paths**: No `..`, no absolute paths, no leading slashes
+
+Invalid entries are silently filtered out.
+
+## Integration with Installer
+
+The installer automatically maintains the lock:
+
+```javascript
+import { recordInstall } from './lock.mjs';
+
+// After writing agent file
+recordInstall(agentName, content, cwd, basePath);
+```
+
+This:
+- Computes SHA-256 of content
+- Updates or creates lock entry
+- Preserves `installedAt` if entry already exists
+- Sets `updatedAt` to current time
+- Writes atomically (temp file + rename)
+
+### Uninstall
+
+When uninstalling, the lock entry is removed:
+
+```javascript
+import { removeLockEntry } from './lock.mjs';
+
+removeLockEntry(agentName, cwd, basePath);
+```
+
+## Filesystem Scanning
+
+The lock system can discover agents not tracked in the manifest:
+
+```javascript
+import { detectAgentStates } from './lock.mjs';
+
+const states = detectAgentStates(manifest, cwd);
+
+for (const [name, state] of states) {
+  if (state === 'unknown') {
+    console.log(`Found untracked agent: ${name}`);
+  }
+}
+```
+
+**Security:** 
+- Symlinks are skipped
+- Resolved paths must stay within `base_path`
+- Recursive scan with cycle detection (`ELOOP` handled)
+
+## Migration and Bootstrap
+
+For existing installations without a lock file:
+
+```javascript
+import { bootstrapLock } from './lock.mjs';
+
+const changed = bootstrapLock(manifest, cwd);
+if (changed) {
+  console.log('Lock file created from existing agents');
+}
+```
+
+This:
+- Only adds entries for agents not already in lock
+- Preserves existing lock entries
+- Returns `true` if lock was modified
+
+## What Lock Files ARE NOT
+
+❌ **Not for supply-chain security**
+
+The lock file doesn't verify that downloaded agents match a trusted source. It only detects post-install modifications. Supply-chain trust comes from:
+- HTTPS download
+- Host allowlist (GitHub raw only)
+- Manual curation of agent registry
+
+❌ **Not a dependency lockfile**
+
+Unlike `package-lock.json`, this doesn't pin versions. Agents don't have version numbers — the registry is always "latest".
+
+❌ **Not a substitute for backups**
+
+The lock file helps detect changes, but can't recover lost or corrupted agents. Keep backups or rely on registry as source of truth.
+
+## Examples
+
+### Detect tampering
+
+```bash
+# Install agents
+npx opencode-agents install --pack backend
+
+# Later, check for modifications
+npx opencode-agents verify
+# → Detects if any agent was edited
+```
+
+### Sync modifications
+
+```bash
+# You edited an agent manually
+# Update lock to match current state
+npx opencode-agents rehash
+
+# Now verify shows all OK
+npx opencode-agents verify
+```
+
+### Update workflow
+
+```bash
+# Periodically check for outdated agents
+npx opencode-agents update --dry-run
+# → Shows which agents would be reinstalled
+
+# Apply updates
+npx opencode-agents update
+```
+
+## Related
+
+- [Permissions](/advanced/permissions) — Control agent access
+- [Architecture](/advanced/architecture) — System design and data flow

@@ -1,0 +1,330 @@
+---
+title: Security Team Pack
+description: Comprehensive security auditing, penetration testing, and compliance frameworks
+---
+
+## Overview
+
+The **Security Team** pack provides expert agents for comprehensive security assessments across applications, infrastructure, and blockchain systems. From security audits to penetration testing, from smart contract analysis to compliance frameworks — this pack covers offensive and defensive security.
+
+Perfect for security engineers, penetration testers, compliance teams, and organizations prioritizing security.
+
+## Installation
+
+```bash
+npx github:dmicheneau/opencode-template-agent install --pack security
+```
+
+## Included Agents
+
+<CardGroup cols={2}>
+  <Card title="security-auditor" icon="shield-halved">
+    **Security Audit Specialist**
+    
+    Code security reviews, vulnerability assessments, risk evaluation, and OWASP Top 10 analysis
+  </Card>
+  
+  <Card title="penetration-tester" icon="user-secret">
+    **Penetration Testing Expert**
+    
+    Offensive security testing, vulnerability exploitation, attack simulation, and risk demonstrations
+  </Card>
+  
+  <Card title="smart-contract-auditor" icon="file-contract">
+    **Smart Contract Security**
+    
+    Blockchain security audits, Solidity vulnerability detection, attack pattern analysis, and Web3 security
+  </Card>
+  
+  <Card title="compliance-auditor" icon="clipboard-check">
+    **Compliance Framework Specialist**
+    
+    SOC2, GDPR, HIPAA, PCI-DSS, ISO 27001 compliance audits and framework implementation
+  </Card>
+</CardGroup>
+
+## Who Should Use This Pack?
+
+<AccordionGroup>
+  <Accordion title="Security Engineers" icon="shield-halved">
+    Conduct comprehensive security audits and implement security controls
+  </Accordion>
+  
+  <Accordion title="Penetration Testers" icon="user-secret">
+    Perform offensive security testing and identify exploitable vulnerabilities
+  </Accordion>
+  
+  <Accordion title="Compliance Teams" icon="clipboard-check">
+    Ensure regulatory compliance and implement security frameworks
+  </Accordion>
+  
+  <Accordion title="Blockchain Developers" icon="link">
+    Audit smart contracts and secure Web3 applications
+  </Accordion>
+</AccordionGroup>
+
+## Example Workflow
+
+Here's how to perform a comprehensive security assessment:
+
+<Steps>
+  <Step title="Initial security audit">
+    Use **security-auditor** for comprehensive code and architecture review
+    
+    ```bash
+    @security/security-auditor
+    Audit this authentication system for security vulnerabilities
+    ```
+  </Step>
+  
+  <Step title="Penetration testing">
+    Use **penetration-tester** to identify exploitable vulnerabilities
+    
+    ```bash
+    @security/penetration-tester
+    Test this API for injection attacks, broken authentication, and authorization bypass
+    ```
+  </Step>
+  
+  <Step title="Smart contract audit (if applicable)">
+    Use **smart-contract-auditor** for blockchain security
+    
+    ```bash
+    @security/smart-contract-auditor
+    Audit this DeFi smart contract for reentrancy and overflow vulnerabilities
+    ```
+  </Step>
+  
+  <Step title="Compliance assessment">
+    Use **compliance-auditor** to verify regulatory requirements
+    
+    ```bash
+    @security/compliance-auditor
+    Assess our SOC2 compliance for access controls and data encryption
+    ```
+  </Step>
+  
+  <Step title="Remediation guidance">
+    Use **security-auditor** to prioritize fixes and provide remediation steps
+    
+    ```bash
+    @security/security-auditor
+    Prioritize these 15 vulnerabilities by severity and provide remediation guidance
+    ```
+  </Step>
+  
+  <Step title="Verify fixes">
+    Use **penetration-tester** to confirm vulnerabilities are resolved
+    
+    ```bash
+    @security/penetration-tester
+    Re-test the authentication system to verify the SQL injection fix
+    ```
+  </Step>
+</Steps>
+
+## Key Capabilities
+
+### Security Auditing
+- OWASP Top 10 vulnerability detection
+- Code security reviews
+- Architecture security assessment
+- Threat modeling
+- Security best practices guidance
+
+### Penetration Testing
+- Application security testing (web, mobile, API)
+- Network security assessment
+- Social engineering simulations
+- Vulnerability exploitation
+- Attack path analysis
+
+### Smart Contract Security
+- Solidity vulnerability detection
+- Reentrancy and overflow analysis
+- Access control verification
+- Gas optimization review
+- Upgrade pattern security
+
+### Compliance Frameworks
+- SOC2 Type I and Type II
+- GDPR data protection
+- HIPAA healthcare compliance
+- PCI-DSS payment security
+- ISO 27001 information security
+
+## Common Use Cases
+
+<Tabs>
+  <Tab title="Web Application Audit">
+    **Agents:** security-auditor → penetration-tester → compliance-auditor
+    
+    Comprehensive security assessment of web applications with compliance verification.
+  </Tab>
+  
+  <Tab title="Smart Contract Audit">
+    **Agents:** smart-contract-auditor → security-auditor → penetration-tester
+    
+    Deep security review of blockchain systems and smart contracts.
+  </Tab>
+  
+  <Tab title="Compliance Certification">
+    **Agents:** compliance-auditor → security-auditor
+    
+    Prepare for SOC2, HIPAA, or ISO 27001 certification audits.
+  </Tab>
+  
+  <Tab title="Penetration Test">
+    **Agents:** penetration-tester → security-auditor
+    
+    Offensive security testing with detailed vulnerability reports.
+  </Tab>
+</Tabs>
+
+## Vulnerability Categories
+
+<AccordionGroup>
+  <Accordion title="OWASP Top 10" icon="list">
+    **security-auditor** and **penetration-tester** cover:
+    - Injection attacks (SQL, NoSQL, command)
+    - Broken authentication and session management
+    - Cross-Site Scripting (XSS)
+    - Security misconfiguration
+    - Sensitive data exposure
+    - And more...
+  </Accordion>
+  
+  <Accordion title="Smart Contract Vulnerabilities" icon="file-contract">
+    **smart-contract-auditor** detects:
+    - Reentrancy attacks
+    - Integer overflow/underflow
+    - Access control issues
+    - Front-running vulnerabilities
+    - Gas optimization issues
+  </Accordion>
+  
+  <Accordion title="Infrastructure Security" icon="server">
+    **security-auditor** and **penetration-tester** assess:
+    - Network segmentation
+    - Firewall configurations
+    - Encryption in transit and at rest
+    - Container and orchestration security
+    - Cloud security posture
+  </Accordion>
+  
+  <Accordion title="Compliance Controls" icon="clipboard-check">
+    **compliance-auditor** verifies:
+    - Access controls and authentication
+    - Data encryption and protection
+    - Audit logging and monitoring
+    - Incident response procedures
+    - Business continuity planning
+  </Accordion>
+</AccordionGroup>
+
+## Security Assessment Process
+
+```mermaid
+graph LR
+    Recon[Reconnaissance]
+    Vuln[Vulnerability Scanning]
+    Exploit[Exploitation]
+    Report[Reporting]
+    Remediate[Remediation]
+    Verify[Verification]
+    
+    Recon --> Vuln
+    Vuln --> Exploit
+    Exploit --> Report
+    Report --> Remediate
+    Remediate --> Verify
+    
+    style Recon fill:#4CAF50,stroke:#333,color:#fff
+    style Vuln fill:#FF9800,stroke:#333,color:#fff
+    style Exploit fill:#F44336,stroke:#333,color:#fff
+    style Report fill:#2196F3,stroke:#333,color:#fff
+    style Remediate fill:#9C27B0,stroke:#333,color:#fff
+    style Verify fill:#4CAF50,stroke:#333,color:#fff
+```
+
+| Phase | Agents | Activities |
+|-------|--------|------------|
+| **Reconnaissance** | penetration-tester | Information gathering, attack surface mapping |
+| **Scanning** | security-auditor, penetration-tester | Automated and manual vulnerability detection |
+| **Exploitation** | penetration-tester | Attempt to exploit identified vulnerabilities |
+| **Reporting** | security-auditor | Document findings, severity ratings, remediation |
+| **Compliance** | compliance-auditor | Map findings to compliance requirements |
+| **Verification** | penetration-tester | Re-test after fixes are implemented |
+
+## Compliance Frameworks
+
+| Framework | Focus | Agent |
+|-----------|-------|-------|
+| **SOC2** | Service organization controls for SaaS | compliance-auditor |
+| **GDPR** | EU data protection and privacy | compliance-auditor |
+| **HIPAA** | Healthcare data protection | compliance-auditor |
+| **PCI-DSS** | Payment card data security | compliance-auditor, security-auditor |
+| **ISO 27001** | Information security management | compliance-auditor, security-auditor |
+| **OWASP ASVS** | Application security verification | security-auditor, penetration-tester |
+
+## Complementary Agents
+
+Consider adding these agents for expanded security coverage:
+
+- **security-engineer** — Design secure architectures and implement DevSecOps
+- **code-reviewer** — Automated code quality and security reviews
+- **docker-specialist** — Container security and image scanning
+- **kubernetes-specialist** — Kubernetes security hardening
+- **aws-specialist** — Cloud security posture and IAM policies
+
+## Security Tools Integration
+
+The security pack agents work alongside these tools:
+
+<Tabs>
+  <Tab title="SAST Tools">
+    Static Application Security Testing:
+    - Semgrep, SonarQube, Checkmarx
+    - Agents provide manual review and false positive filtering
+  </Tab>
+  
+  <Tab title="DAST Tools">
+    Dynamic Application Security Testing:
+    - Burp Suite, OWASP ZAP, Nuclei
+    - Agents help interpret results and guide exploitation
+  </Tab>
+  
+  <Tab title="Smart Contract Tools">
+    Blockchain security:
+    - Slither, Mythril, Echidna
+    - **smart-contract-auditor** interprets tool output and finds logic bugs
+  </Tab>
+  
+  <Tab title="Compliance Tools">
+    GRC platforms:
+    - Vanta, Drata, Tugboat Logic
+    - **compliance-auditor** maps controls and provides evidence
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Install Security Pack" icon="download">
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install --pack security
+    ```
+  </Card>
+  
+  <Card title="Explore Individual Agents" icon="users" href="/agents/overview">
+    Browse detailed documentation for each agent
+  </Card>
+  
+  <Card title="DevOps Pack" icon="gears" href="/packs/devops">
+    Add infrastructure security and deployment automation
+  </Card>
+  
+  <Card title="Backend Pack" icon="server" href="/packs/backend">
+    Build secure backend systems and APIs
+  </Card>
+</CardGroup>

@@ -1,0 +1,207 @@
+---
+title: Packs Overview
+description: Predefined bundles of agents for common tech stacks and workflows
+---
+
+## What are Packs?
+
+Packs are curated collections of agents designed to work together for specific tech stacks, workflows, or team structures. Instead of installing agents one by one, you can install a complete pack in a single command.
+
+Each pack contains 2-9 agents selected for their complementary expertise, covering everything from development to deployment.
+
+## Why Use Packs?
+
+<CardGroup cols={2}>
+  <Card title="Faster Setup" icon="rocket">
+    Install a complete tech stack in seconds instead of selecting individual agents
+  </Card>
+  <Card title="Proven Combinations" icon="check">
+    Agents are curated to work together seamlessly for specific use cases
+  </Card>
+  <Card title="Role-Based" icon="users">
+    Packs align with real team roles and project phases
+  </Card>
+  <Card title="Easy Updates" icon="rotate">
+    Update an entire stack at once with a single command
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+Install any pack using the CLI:
+
+```bash
+npx github:dmicheneau/opencode-template-agent install --pack backend
+```
+
+Or browse and install via the interactive TUI:
+
+```bash
+npx github:dmicheneau/opencode-template-agent
+# Navigate to Packs tab with arrow keys
+```
+
+## Available Packs
+
+All 15 packs organized by use case:
+
+### Core Development Stacks
+
+<CardGroup cols={2}>
+  <Card title="Backend Essentials" icon="server" href="/packs/backend">
+    **8 agents** — Core backend development with databases, APIs, and testing
+  </Card>
+  <Card title="Frontend Stack" icon="browser" href="/packs/frontend">
+    **6 agents** — Modern frontend development with React, Next.js, and performance
+  </Card>
+  <Card title="Full-Stack Developer" icon="layer-group" href="/packs/fullstack">
+    **9 agents** — End-to-end development from database to UI
+  </Card>
+  <Card title="DevOps Toolkit" icon="gears" href="/packs/devops">
+    **8 agents** — Complete infrastructure and deployment automation
+  </Card>
+</CardGroup>
+
+### Specialized Domains
+
+<CardGroup cols={2}>
+  <Card title="AI & ML Suite" icon="brain" href="/packs/ai">
+    **6 agents** — Machine learning, LLM systems, and data science
+  </Card>
+  <Card title="Security Team" icon="shield-halved" href="/packs/security">
+    **4 agents** — Comprehensive security auditing and compliance
+  </Card>
+  <Card title="MCP Development" icon="plug">
+    **2 agents** — Model Context Protocol server development and security
+  </Card>
+  <Card title="Code Quality" icon="check-double">
+    **6 agents** — Testing, debugging, performance, and refactoring
+  </Card>
+</CardGroup>
+
+### Team & Workflow Packs
+
+<CardGroup cols={2}>
+  <Card title="Startup Kit" icon="rocket">
+    **8 agents** — Essential agents for lean startup teams
+  </Card>
+  <Card title="Product Discovery" icon="compass">
+    **5 agents** — User research to product requirements and design
+  </Card>
+  <Card title="Ship It Safely" icon="parachute-box">
+    **6 agents** — CI/CD, containers, and reliability engineering
+  </Card>
+  <Card title="Architecture & Docs" icon="diagram-project">
+    **5 agents** — System design, documentation, and visualization
+  </Card>
+</CardGroup>
+
+### Data & ML Production
+
+<CardGroup cols={2}>
+  <Card title="Data Stack" icon="database">
+    **6 agents** — End-to-end data pipeline from ingestion to analytics
+  </Card>
+  <Card title="ML to Production" icon="rocket">
+    **6 agents** — Take ML models from training to production deployment
+  </Card>
+  <Card title="Frontend Complete" icon="window-maximize">
+    **6 agents** — Every framework for modern frontend development
+  </Card>
+</CardGroup>
+
+## Pack Comparison Table
+
+| Pack | Agents | Best For | Key Capabilities |
+|------|--------|----------|------------------|
+| **backend** | 8 | Backend engineers | Databases (PostgreSQL, Redis), APIs, Python/TypeScript, testing |
+| **frontend** | 6 | Frontend engineers | React, Next.js, TypeScript, UI design, performance |
+| **fullstack** | 9 | Full-stack teams | Complete stack from DB to UI with code review |
+| **devops** | 8 | Platform engineers | Docker, Kubernetes, Terraform, AWS, CI/CD, incident response |
+| **ai** | 6 | ML/AI engineers | Model training, LLM architecture, prompts, data science |
+| **security** | 4 | Security teams | Audits, penetration testing, smart contracts, compliance |
+| **mcp** | 2 | MCP developers | Server development, security auditing |
+| **quality** | 6 | QA teams | Code review, testing, debugging, refactoring |
+| **startup** | 8 | Early-stage teams | Full-stack, product, design, deployment |
+| **data-stack** | 6 | Data teams | ETL, warehousing, analytics, SQL |
+| **ml-to-production** | 6 | MLOps teams | Training, serving, orchestration |
+| **frontend-complete** | 6 | Frontend specialists | React, Vue, Angular, accessibility |
+| **ship-it-safely** | 6 | Release teams | CI/CD, containers, SRE, security |
+| **product-discovery** | 5 | Product teams | Research, strategy, requirements, design |
+| **architecture-docs** | 5 | Architecture teams | Microservices, API design, diagrams |
+
+## Installation Commands
+
+<CodeGroup>
+
+```bash Install single pack
+npx github:dmicheneau/opencode-template-agent install --pack backend
+```
+
+```bash Install multiple packs
+npx github:dmicheneau/opencode-template-agent install --pack backend,devops
+```
+
+```bash Interactive TUI
+npx github:dmicheneau/opencode-template-agent
+# Navigate to Packs tab
+```
+
+</CodeGroup>
+
+## Managing Installed Packs
+
+Packs are collections of individual agents, so you manage them through standard agent commands:
+
+<Steps>
+  <Step title="Check installed agents">
+    ```bash
+    ls .opencode/agents/
+    ```
+    Each agent in the pack appears as a separate file
+  </Step>
+  
+  <Step title="Update agents">
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install --pack backend --force
+    ```
+    The `--force` flag updates existing agents to the latest version
+  </Step>
+  
+  <Step title="Remove agents">
+    Manually delete individual agent files you don't need, or remove all agents from a category
+  </Step>
+</Steps>
+
+<Note>
+Packs don't create separate "pack" files — they simply install a predefined list of agents. Once installed, each agent is independent.
+</Note>
+
+## Creating Custom Combinations
+
+While predefined packs cover common scenarios, you can mix and match agents:
+
+```bash
+# Install base pack + additional agents
+npx github:dmicheneau/opencode-template-agent install --pack backend
+npx github:dmicheneau/opencode-template-agent install golang-pro redis-specialist
+```
+
+Or use the TUI to build custom selections with `Space` to select multiple agents before installing.
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Backend Pack" icon="server" href="/packs/backend">
+    Essential agents for backend development
+  </Card>
+  <Card title="Frontend Pack" icon="browser" href="/packs/frontend">
+    Complete frontend development stack
+  </Card>
+  <Card title="Full-Stack Pack" icon="layer-group" href="/packs/fullstack">
+    End-to-end development capabilities
+  </Card>
+  <Card title="DevOps Pack" icon="gears" href="/packs/devops">
+    Infrastructure and deployment automation
+  </Card>
+</CardGroup>

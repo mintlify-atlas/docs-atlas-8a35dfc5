@@ -1,0 +1,399 @@
+---
+title: Installation
+description: Three ways to install OpenCode agents — choose the method that fits your workflow
+---
+
+OpenCode Agents supports three installation methods: an interactive TUI browser, a non-interactive CLI for automation, and a bash script for advanced use cases. All three methods install agents to `.opencode/agents/` in your project.
+
+## Requirements
+
+<CardGroup cols={2}>
+  <Card title="For TUI and CLI" icon="node-js">
+    **Node.js 20 or higher** — the CLI is zero-dependency and runs on Node.js built-ins only.
+  </Card>
+  <Card title="For bash script" icon="terminal">
+    **Git and bash** — the script clones the repo and creates symlinks or copies.
+  </Card>
+</CardGroup>
+
+---
+
+## Method 1 — Interactive TUI
+
+<Note>
+  **Recommended for first-time users.** The TUI provides a visual browser with search, category tabs, and pack exploration.
+</Note>
+
+The TUI launches automatically when you run the CLI in a terminal that supports TTY:
+
+```bash
+npx github:dmicheneau/opencode-template-agent
+```
+
+Or explicitly:
+
+```bash
+npx github:dmicheneau/opencode-template-agent tui
+```
+
+### TUI features
+
+- **Category tabs** — browse agents by category (`←` `→` or `Tab`)
+- **Agent list** — navigate with `↑` `↓`, select with `Space`
+- **Search** — press `/` to filter agents by name or description
+- **Pack explorer** — view and install predefined packs
+- **Install confirmation** — review selections before installing
+
+### TUI keyboard shortcuts
+
+| Key | Action |
+|-----|--------|
+| `↑` `↓` | Navigate agent list |
+| `←` `→` | Switch category tabs |
+| `Tab` | Cycle through tabs |
+| `Space` | Select/deselect agent |
+| `Enter` | Install selected agents |
+| `/` | Open search |
+| `Esc` | Cancel or go back |
+| `q` | Quit |
+
+---
+
+## Method 2 — Non-interactive CLI
+
+<Note>
+  **Best for automation, CI/CD, or scripting.** All commands are non-interactive and suitable for pipelines.
+</Note>
+
+The CLI provides commands for installing agents, packs, or categories without user interaction.
+
+### Install a single agent
+
+```bash
+npx github:dmicheneau/opencode-template-agent install typescript-pro
+```
+
+### Install a pack
+
+Install one or more predefined packs:
+
+<CodeGroup>
+
+```bash Single pack
+npx github:dmicheneau/opencode-template-agent install --pack backend
+```
+
+```bash Multiple packs (comma-separated)
+npx github:dmicheneau/opencode-template-agent install --pack backend,devops
+```
+
+```bash Multiple packs (space-separated)
+npx github:dmicheneau/opencode-template-agent install --pack backend devops security
+```
+
+</CodeGroup>
+
+### Install by category
+
+Install all agents in one or more categories:
+
+<CodeGroup>
+
+```bash Single category
+npx github:dmicheneau/opencode-template-agent install --category languages
+```
+
+```bash Multiple categories
+npx github:dmicheneau/opencode-template-agent install --category languages,data-api
+```
+
+</CodeGroup>
+
+### Install all agents
+
+Install the entire registry of 69 agents:
+
+```bash
+npx github:dmicheneau/opencode-template-agent install --all
+```
+
+### CLI options
+
+| Option | Description |
+|--------|-------------|
+| `--force` | Overwrite existing agent files |
+| `--dry-run` | Preview changes without writing files |
+| `--permissions <preset>` | Apply permission preset (`strict`, `balanced`, `permissive`, `yolo`) |
+| `--yolo` | Set all permissions to allow (requires typing `CONFIRM`) |
+| `--save-permissions` | Save permission choices as default |
+
+### List and search commands
+
+<CodeGroup>
+
+```bash List all agents
+npx github:dmicheneau/opencode-template-agent list
+```
+
+```bash List packs
+npx github:dmicheneau/opencode-template-agent list --packs
+```
+
+```bash Search agents
+npx github:dmicheneau/opencode-template-agent search docker
+```
+
+```bash Search with multi-word query
+npx github:dmicheneau/opencode-template-agent search "machine learning"
+```
+
+</CodeGroup>
+
+### Update outdated agents
+
+Reinstall agents whose installed file hash doesn't match the registry:
+
+```bash
+npx github:dmicheneau/opencode-template-agent update
+```
+
+Or as a flag:
+
+```bash
+npx github:dmicheneau/opencode-template-agent install --update
+```
+
+### Verify integrity
+
+Verify that installed agent files match their lock file hashes:
+
+```bash
+npx github:dmicheneau/opencode-template-agent verify
+```
+
+### Rebuild lock file
+
+Rebuild the lock file from disk (recompute hashes for all installed agents):
+
+```bash
+npx github:dmicheneau/opencode-template-agent rehash
+```
+
+### Uninstall agents
+
+<CodeGroup>
+
+```bash Uninstall single agent
+npx github:dmicheneau/opencode-template-agent uninstall postgres-pro
+```
+
+```bash Uninstall category
+npx github:dmicheneau/opencode-template-agent uninstall --category devops
+```
+
+```bash Uninstall pack
+npx github:dmicheneau/opencode-template-agent uninstall --pack backend
+```
+
+```bash Uninstall all
+npx github:dmicheneau/opencode-template-agent uninstall --all
+```
+
+</CodeGroup>
+
+---
+
+## Method 3 — Bash script
+
+<Note>
+  **For advanced users.** The bash script clones the repo locally and creates symlinks (or copies) into your OpenCode config. Ideal for global installs or custom directory structures.
+</Note>
+
+### Quick install (symlink mode)
+
+Run the install script directly from GitHub:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash
+```
+
+The script will:
+- Clone the repo to `~/.local/share/opencode-agents`
+- Detect your OpenCode config (project `.opencode/` or global `~/.config/opencode/`)
+- Create symlinks in `.opencode/agents/` pointing to the cloned repo
+- Preserve your existing `opencode.json` and agents
+
+### Bash script options
+
+| Option | Description |
+|--------|-------------|
+| `--copy` | Copy agent files instead of creating symlinks |
+| `--dir PATH` | Target directory (default: current directory) |
+| `--global` | Install into `~/.config/opencode/` instead of project `.opencode/` |
+| `--force` | Skip interactive confirmations |
+| `--dry-run` | Preview actions without executing |
+| `--uninstall` | Remove previously installed agents |
+
+### Examples
+
+<CodeGroup>
+
+```bash Install globally
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash -s -- --global
+```
+
+```bash Copy instead of symlink
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash -s -- --copy
+```
+
+```bash Install to specific directory
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash -s -- --dir ~/my-project
+```
+
+```bash Preview without installing
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash -s -- --dry-run
+```
+
+```bash Uninstall
+curl -fsSL https://raw.githubusercontent.com/dmicheneau/opencode-template-agent/main/install.sh | bash -s -- --uninstall
+```
+
+</CodeGroup>
+
+### Manual clone method
+
+For full control, clone the repo and set `OPENCODE_CONFIG_DIR`:
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone https://github.com/dmicheneau/opencode-template-agent.git ~/.opencode-agents
+    ```
+  </Step>
+
+  <Step title="Set OPENCODE_CONFIG_DIR">
+    Add to your shell config (`~/.zshrc`, `~/.bashrc`, etc.):
+
+    ```bash
+    export OPENCODE_CONFIG_DIR=~/.opencode-agents
+    ```
+  </Step>
+
+  <Step title="Reload your shell">
+    ```bash
+    source ~/.zshrc
+    ```
+
+    Or restart your terminal.
+  </Step>
+</Steps>
+
+OpenCode will now use the cloned repo as the agent source.
+
+---
+
+## Where are agents installed?
+
+All three methods install agents to the same location:
+
+```
+.opencode/
+├── agents/
+│   ├── ai/
+│   ├── business/
+│   ├── data-api/
+│   ├── devops/
+│   ├── devtools/
+│   ├── docs/
+│   ├── languages/
+│   ├── mcp/
+│   ├── security/
+│   ├── web/
+│   └── manifest.json
+├── agents.lock
+└── opencode.json
+```
+
+- **Project install** — `.opencode/` in your project root
+- **Global install** — `~/.config/opencode/` (accessible from all projects)
+
+<Note>
+  The CLI and TUI **never modify** your `opencode.json`. Your existing configuration is always preserved.
+</Note>
+
+---
+
+## Permission management
+
+Agents declare required permissions in their frontmatter. The installer resolves permissions based on presets or explicit overrides.
+
+### Permission presets
+
+| Preset | Description |
+|--------|-------------|
+| `strict` | Deny all risky permissions by default |
+| `balanced` | Allow common workflows, deny destructive operations |
+| `permissive` | Allow most operations, deny only high-risk actions |
+| `yolo` | Allow everything (requires typing `CONFIRM`) |
+
+### Set permissions during install
+
+<CodeGroup>
+
+```bash Apply preset
+npx github:dmicheneau/opencode-template-agent install --pack backend --permissions balanced
+```
+
+```bash Override specific permission
+npx github:dmicheneau/opencode-template-agent install typescript-pro --permission-override file_write=deny
+```
+
+```bash YOLO mode (all allowed)
+npx github:dmicheneau/opencode-template-agent install --yolo
+# You'll be prompted to type CONFIRM
+```
+
+```bash Save preferences
+npx github:dmicheneau/opencode-template-agent install --permissions balanced --save-permissions
+# Future installs will use this preset by default
+```
+
+</CodeGroup>
+
+---
+
+## Command aliases
+
+The CLI supports short aliases for common commands:
+
+| Full command | Aliases |
+|--------------|----------|
+| `install` | `i`, `add` |
+| `uninstall` | `remove`, `rm` |
+| `list` | `ls` |
+| `search` | `find` |
+
+```bash
+npx github:dmicheneau/opencode-template-agent i typescript-pro
+npx github:dmicheneau/opencode-template-agent ls
+npx github:dmicheneau/opencode-template-agent rm typescript-pro
+```
+
+---
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Agent Catalog" icon="books" href="/agents/overview">
+    Browse all 69 agents with quality scores and descriptions
+  </Card>
+  <Card title="Packs" icon="box" href="/packs/overview">
+    Explore 15 predefined packs for common workflows
+  </Card>
+  <Card title="OpenCode Plugin" icon="plug" href="/plugin/overview">
+    Install the plugin for LLM-powered agent discovery
+  </Card>
+  <Card title="CLI Reference" icon="terminal" href="/cli/install">
+    Full CLI command reference and flags
+  </Card>
+</CardGroup>

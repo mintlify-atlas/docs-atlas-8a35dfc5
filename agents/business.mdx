@@ -1,0 +1,216 @@
+---
+title: Business & Management
+description: Project management, product strategy, UX research, and agile practices
+---
+
+6 specialized agents covering product management, project delivery, user research, and business analysis.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="Product Manager" icon="lightbulb">
+    **Product strategy, feature prioritization, and roadmap planning**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: product, strategy, roadmap, prioritization, user-research
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install product-manager
+    ```
+  </Card>
+
+  <Card title="PRD (Product Requirements)" icon="file-lines">
+    **Transform ideas and briefs into structured, actionable Product Requirements Documents**
+    
+    - Mode: `all` (primary or subagent)
+    - Quality: 4.25/5 (Good)
+    - Tags: prd, requirements, product, specifications, documentation, planning
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install prd
+    ```
+  </Card>
+
+  <Card title="Project Manager" icon="tasks">
+    **Project planning, risk management, and stakeholder coordination**
+    
+    - Mode: `subagent`
+    - Quality: 4.38/5 (Good)
+    - Tags: project-management, planning, risk, stakeholders, budget
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install project-manager
+    ```
+  </Card>
+
+  <Card title="Scrum Master" icon="arrows-spin">
+    **Agile facilitation, sprint planning, and team velocity improvement**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: scrum, agile, sprint, retrospective, kanban, facilitation
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install scrum-master
+    ```
+  </Card>
+
+  <Card title="UX Researcher" icon="users">
+    **User research, usability testing, personas, and journey mapping**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: ux-research, usability, personas, user-testing, journey-mapping
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install ux-researcher
+    ```
+  </Card>
+
+  <Card title="Business Analyst" icon="chart-line">
+    **Requirements engineering, process modeling, stakeholder analysis, and BRDs**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: business-analysis, requirements, process-modeling, brd, stakeholders
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install business-analyst
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Product Strategy
+@business/product-manager Prioritize these feature requests using RICE
+```
+
+```bash Requirements
+@business/prd Write a PRD for user authentication feature
+```
+
+```bash User Research
+@business/ux-researcher Design a usability test for checkout flow
+```
+
+```bash Agile
+@business/scrum-master Plan sprint retrospective format
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.33/5
+- **1 Excellent, 5 Good** rating
+- **Total tokens**: ~7,300 (avg ~1,220 per agent)
+- **Coverage**: Product → Requirements → Execution
+
+## Common Workflows
+
+<Accordion title="Product Discovery Pack">
+  From research to requirements:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack product-discovery
+  ```
+  
+  Includes: product-manager, ux-researcher, business-analyst, prd, ui-designer
+</Accordion>
+
+<Accordion title="Startup Kit">
+  Lean team for fast iteration:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack startup
+  ```
+  
+  Includes: fullstack-developer, typescript-pro, nextjs-developer, postgres-pro, docker-specialist, product-manager, ui-designer, test-automator
+</Accordion>
+
+<Accordion title="Product Development Cycle">
+  1. **UX Researcher** — User research and insights
+  2. **Product Manager** — Strategy and prioritization
+  3. **PRD** or **Business Analyst** — Requirements documentation
+  4. **UI Designer** — Design mockups
+  5. **Scrum Master** — Sprint planning and execution
+</Accordion>
+
+<Accordion title="Agile Team">
+  1. **Product Manager** — Backlog prioritization
+  2. **Scrum Master** — Sprint facilitation
+  3. **Project Manager** — Cross-team coordination
+  4. **Business Analyst** — Requirements refinement
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose Product Manager when...">
+  - Defining product strategy
+  - Prioritizing features (RICE, WSJF, ICE)
+  - Building product roadmaps
+  - Making build vs buy decisions
+  - Conducting competitive analysis
+</Accordion>
+
+<Accordion title="Choose PRD when...">
+  - Writing Product Requirements Documents
+  - Converting ideas into structured specs
+  - Documenting feature requirements
+  - Aligning stakeholders on scope
+  - Creating actionable development plans
+</Accordion>
+
+<Accordion title="Choose Project Manager when...">
+  - Planning project timelines
+  - Managing risks and dependencies
+  - Coordinating stakeholders
+  - Tracking budget and resources
+  - Reporting project status
+</Accordion>
+
+<Accordion title="Choose Scrum Master when...">
+  - Facilitating Scrum ceremonies
+  - Sprint planning and retrospectives
+  - Removing team blockers
+  - Improving team velocity
+  - Coaching agile practices
+</Accordion>
+
+<Accordion title="Choose UX Researcher when...">
+  - Conducting user interviews
+  - Usability testing
+  - Creating user personas
+  - Journey mapping
+  - Validating design decisions
+</Accordion>
+
+<Accordion title="Choose Business Analyst when...">
+  - Gathering requirements
+  - Process modeling (BPMN)
+  - Stakeholder analysis
+  - Writing BRDs (Business Requirements Documents)
+  - Gap analysis
+</Accordion>
+
+## Integration with Development
+
+<CardGroup cols={2}>
+  <Card title="Product → Development" icon="arrow-right">
+    Bridge business and engineering:
+    
+    1. **Product Manager** — Define strategy
+    2. **PRD** — Write requirements
+    3. **Full-Stack Developer** — Implementation
+    4. **QA Expert** — Validate delivery
+  </Card>
+  
+  <Card title="Research → Design → Build" icon="diagram-project">
+    Complete product workflow:
+    
+    1. **UX Researcher** — User insights
+    2. **UI Designer** — Design system
+    3. **React Specialist** — Component implementation
+    4. **Accessibility** — A11y validation
+  </Card>
+</CardGroup>

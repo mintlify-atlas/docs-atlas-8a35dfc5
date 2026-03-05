@@ -1,0 +1,227 @@
+---
+title: DevTools
+description: Code review, debugging, testing, refactoring, performance optimization, and workflow orchestration
+---
+
+8 specialized agents covering code quality, testing strategies, and development workflow optimization.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="Code Reviewer" icon="code-compare">
+    **Code quality reviews, security vulnerability detection, and best practices**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: code-review, quality, security, best-practices, linting
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install code-reviewer
+    ```
+  </Card>
+
+  <Card title="Debugger" icon="bug">
+    **Bug diagnosis, root cause analysis, and error log investigation**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: debugging, diagnostics, root-cause, errors, stack-traces
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install debugger
+    ```
+  </Card>
+
+  <Card title="Test Automator" icon="vial">
+    **Automated test frameworks, test scripts, and CI/CD test integration**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: testing, automation, ci-cd, test-frameworks, coverage, e2e
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install test-automator
+    ```
+  </Card>
+
+  <Card title="Performance Engineer" icon="gauge-high">
+    **Performance bottleneck identification and optimization across systems**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: performance, optimization, profiling, bottlenecks, benchmarking
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install performance-engineer
+    ```
+  </Card>
+
+  <Card title="Refactoring Specialist" icon="rotate">
+    **Code restructuring into clean, maintainable systems preserving behavior**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: refactoring, clean-code, maintainability, patterns, architecture
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install refactoring-specialist
+    ```
+  </Card>
+
+  <Card title="Legacy Modernizer" icon="clock-rotate-left">
+    **Legacy codebase modernization using strangler fig, branch by abstraction, and parallel run patterns**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: legacy, modernization, migration, strangler-fig, refactoring
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install legacy-modernizer
+    ```
+  </Card>
+
+  <Card title="Microservices Architect" icon="diagram-project">
+    **Distributed systems design, saga patterns, and service mesh architecture**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: microservices, distributed-systems, saga, service-mesh, event-driven
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install microservices-architect
+    ```
+  </Card>
+
+  <Card title="QA Expert" icon="clipboard-check">
+    **Test strategy, quality gates, regression testing, and QA automation**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: qa, quality-assurance, testing, regression, quality-gates
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install qa-expert
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Code Review
+@devtools/code-reviewer Review this PR for security and performance
+```
+
+```bash Debugging
+@devtools/debugger Analyze this production error stack trace
+```
+
+```bash Testing
+@devtools/test-automator Write integration tests for this API
+```
+
+```bash Performance
+@devtools/performance-engineer Profile and optimize this slow endpoint
+```
+
+```bash Refactoring
+@devtools/refactoring-specialist Extract interfaces from this monolithic service
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.34/5
+- **3 Excellent, 5 Good** rating
+- **Total tokens**: ~11,500 (avg ~1,440 per agent)
+- **Coverage**: Full development lifecycle
+
+## Common Workflows
+
+<Accordion title="Code Quality Pack">
+  Comprehensive quality assurance:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack quality
+  ```
+  
+  Includes: code-reviewer, test-automator, debugger, performance-engineer, refactoring-specialist, legacy-modernizer
+</Accordion>
+
+<Accordion title="Testing Strategy">
+  1. **QA Expert** — Define test strategy and quality gates
+  2. **Test Automator** — Implement automated tests
+  3. **Code Reviewer** — Review test coverage and quality
+  4. **Performance Engineer** — Add performance tests
+</Accordion>
+
+<Accordion title="Legacy Modernization">
+  1. **Legacy Modernizer** — Plan migration strategy
+  2. **Refactoring Specialist** — Refactor code incrementally
+  3. **Test Automator** — Add tests to preserve behavior
+  4. **Code Reviewer** — Review modernization PRs
+</Accordion>
+
+<Accordion title="Production Issues">
+  1. **Debugger** — Root cause analysis
+  2. **Performance Engineer** — Identify bottlenecks
+  3. **Code Reviewer** — Review fixes
+  4. **Test Automator** — Add regression tests
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose Code Reviewer when...">
+  - Reviewing pull requests
+  - Checking for security vulnerabilities
+  - Enforcing coding standards
+  - Identifying code smells
+</Accordion>
+
+<Accordion title="Choose Debugger when...">
+  - Investigating production errors
+  - Analyzing stack traces
+  - Troubleshooting unexpected behavior
+  - Root cause analysis
+</Accordion>
+
+<Accordion title="Choose Test Automator when...">
+  - Writing unit/integration/e2e tests
+  - Setting up test frameworks
+  - Improving test coverage
+  - Integrating tests into CI/CD
+</Accordion>
+
+<Accordion title="Choose Performance Engineer when...">
+  - Profiling slow code
+  - Identifying bottlenecks
+  - Optimizing database queries
+  - Improving response times
+</Accordion>
+
+<Accordion title="Choose Refactoring Specialist when...">
+  - Improving code maintainability
+  - Extracting patterns from duplication
+  - Simplifying complex logic
+  - Restructuring without changing behavior
+</Accordion>
+
+<Accordion title="Choose Legacy Modernizer when...">
+  - Migrating legacy codebases
+  - Applying strangler fig pattern
+  - Planning incremental rewrites
+  - Modernizing technology stacks
+</Accordion>
+
+<Accordion title="Choose Microservices Architect when...">
+  - Designing distributed systems
+  - Implementing saga patterns
+  - Breaking down monoliths
+  - Service mesh architecture
+</Accordion>
+
+<Accordion title="Choose QA Expert when...">
+  - Defining test strategies
+  - Setting up quality gates
+  - Planning regression testing
+  - Establishing QA processes
+</Accordion>

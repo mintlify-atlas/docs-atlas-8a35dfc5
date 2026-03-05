@@ -1,0 +1,191 @@
+---
+title: MCP (Model Context Protocol)
+description: Agents for building and securing MCP servers
+---
+
+2 specialized agents covering MCP server development and security auditing.
+
+## About MCP
+
+The [Model Context Protocol](https://modelcontextprotocol.io) is an open standard that enables AI assistants to securely access data and tools. MCP servers expose resources (data) and tools (functions) that AI models can use during conversations.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="MCP Developer" icon="code">
+    **MCP server development, tool design, resource exposure, and transport implementation**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: mcp, server, tools, resources, sdk, development
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install mcp-developer
+    ```
+  </Card>
+
+  <Card title="MCP Security Auditor" icon="shield">
+    **MCP server security reviews, OAuth, RBAC, and compliance frameworks**
+    
+    - Mode: `subagent`
+    - Quality: 4.12/5 (Good)
+    - Tags: mcp, security, oauth, rbac, compliance, audit
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install mcp-security-auditor
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Development
+@mcp/mcp-developer Build an MCP server for GitHub API
+```
+
+```bash Security
+@mcp/mcp-security-auditor Audit this MCP server for OAuth vulnerabilities
+```
+
+```bash Tool Design
+@mcp/mcp-developer Design tools for database query access
+```
+
+```bash Compliance
+@mcp/mcp-security-auditor Review RBAC implementation for SOC2
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.50/5
+- **1 Excellent, 1 Good** rating
+- **Total tokens**: ~2,700 (avg ~1,335 per agent)
+- **Coverage**: Development + security
+
+## Common Workflows
+
+<Accordion title="MCP Development Pack">
+  Both MCP agents for complete coverage:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack mcp
+  ```
+  
+  Includes: mcp-developer, mcp-security-auditor
+</Accordion>
+
+<Accordion title="Building an MCP Server">
+  1. **MCP Developer** — Design server architecture and tools
+  2. **MCP Developer** — Implement resources and transports
+  3. **MCP Security Auditor** — Security review before deployment
+  4. **MCP Security Auditor** — Compliance validation (if needed)
+</Accordion>
+
+<Accordion title="Securing an MCP Server">
+  1. **MCP Security Auditor** — Security architecture review
+  2. **MCP Security Auditor** — OAuth/RBAC implementation audit
+  3. **MCP Developer** — Implement security improvements
+  4. **MCP Security Auditor** — Final validation
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose MCP Developer when...">
+  - Building new MCP servers
+  - Designing tool schemas
+  - Implementing resource providers
+  - Integrating with existing APIs
+  - Working with MCP SDKs (TypeScript, Python)
+  - Setting up transport layers (stdio, SSE, HTTP)
+</Accordion>
+
+<Accordion title="Choose MCP Security Auditor when...">
+  - Auditing MCP server security
+  - Implementing OAuth flows
+  - Designing RBAC policies
+  - Ensuring compliance (SOC2, GDPR)
+  - Reviewing authentication/authorization
+  - Validating data access controls
+</Accordion>
+
+## MCP Concepts
+
+<Card title="Resources" icon="database">
+  Data that MCP servers expose to AI models:
+  - Files
+  - Database records
+  - API responses
+  - Real-time streams
+  
+  Use **MCP Developer** to design resource schemas and providers.
+</Card>
+
+<Card title="Tools" icon="wrench">
+  Functions that AI models can invoke:
+  - Data queries
+  - API calls
+  - File operations
+  - Computation tasks
+  
+  Use **MCP Developer** to design tool interfaces and validation.
+</Card>
+
+<Card title="Security" icon="lock">
+  Critical considerations for MCP servers:
+  - Authentication (OAuth, API keys)
+  - Authorization (RBAC, permissions)
+  - Data validation (input sanitization)
+  - Rate limiting
+  
+  Use **MCP Security Auditor** for security reviews.
+</Card>
+
+<Card title="Transports" icon="network-wired">
+  Communication protocols:
+  - **stdio** — Local processes
+  - **SSE** — Server-sent events
+  - **HTTP** — REST endpoints
+  
+  Use **MCP Developer** to implement transport layers.
+</Card>
+
+## Integration Examples
+
+<Accordion title="MCP Server + Backend">
+  Combine MCP agents with backend specialists:
+  
+  1. **API Architect** — Design underlying API
+  2. **MCP Developer** — Expose API via MCP
+  3. **Security Engineer** — Security architecture
+  4. **MCP Security Auditor** — MCP-specific security review
+</Accordion>
+
+<Accordion title="MCP Server + Database">
+  Database access via MCP:
+  
+  1. **Database Architect** — Design data model
+  2. **PostgreSQL Pro** or **SQL Pro** — Optimize queries
+  3. **MCP Developer** — Build query tools and resource providers
+  4. **MCP Security Auditor** — Validate access controls
+</Accordion>
+
+## Resources
+
+<CardGroup cols={2}>
+  <Card title="MCP Specification" icon="book" href="https://spec.modelcontextprotocol.io">
+    Official protocol specification
+  </Card>
+  
+  <Card title="MCP Documentation" icon="file-lines" href="https://modelcontextprotocol.io">
+    Guides and examples
+  </Card>
+  
+  <Card title="TypeScript SDK" icon="code" href="https://github.com/modelcontextprotocol/typescript-sdk">
+    Official TypeScript implementation
+  </Card>
+  
+  <Card title="Python SDK" icon="python" href="https://github.com/modelcontextprotocol/python-sdk">
+    Official Python implementation
+  </Card>
+</CardGroup>

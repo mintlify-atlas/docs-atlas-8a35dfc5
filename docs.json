@@ -1,122 +1,116 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "OpenCode Agents",
+  "theme": "aspen",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#848c8e",
+    "light": "#11161e",
+    "dark": "#cfd0d2"
   },
-  "favicon": "/favicon.svg",
+  "logo": {
+    "light": "https://media.brand.dev/5ffd6ce4-2434-4b4b-920a-f8cacac8b48b.svg",
+    "dark": "https://media.brand.dev/5ffd6ce4-2434-4b4b-920a-f8cacac8b48b.svg"
+  },
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/dmicheneau/opencode-template-agent"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/dmicheneau/opencode-template-agent"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
             "pages": [
-              "index",
+              "introduction",
               "quickstart",
-              "development"
+              "installation"
             ]
           },
           {
-            "group": "Customization",
+            "group": "CLI Reference",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "cli/install",
+              "cli/list",
+              "cli/search",
+              "cli/uninstall",
+              "cli/update",
+              "cli/tui"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Agent Catalog",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "agents/overview",
+              "agents/languages",
+              "agents/ai-ml",
+              "agents/web-mobile",
+              "agents/data-api",
+              "agents/devops",
+              "agents/devtools",
+              "agents/security",
+              "agents/mcp",
+              "agents/business",
+              "agents/docs"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Packs",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "packs/overview",
+              "packs/backend",
+              "packs/frontend",
+              "packs/fullstack",
+              "packs/devops",
+              "packs/ai",
+              "packs/security"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "advanced/permissions",
+              "advanced/lock-system",
+              "advanced/quality-scoring",
+              "advanced/architecture"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "OpenCode Plugin",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Plugin",
             "pages": [
-              "api-reference/introduction"
+              "plugin/overview",
+              "plugin/installation",
+              "plugin/tools"
             ]
-          },
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
           {
-            "group": "Endpoint examples",
+            "group": "Development",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "contributing/overview",
+              "contributing/adding-agents",
+              "contributing/testing"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

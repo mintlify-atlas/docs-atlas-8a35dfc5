@@ -1,0 +1,106 @@
+---
+title: 'OpenCode Plugin Overview'
+description: 'Expose the agent registry as LLM tools directly in your OpenCode AI sessions'
+---
+
+## What is the OpenCode Plugin?
+
+The OpenCode plugin exposes the agent registry as **4 LLM tools** that work directly in your [OpenCode](https://opencode.ai) AI sessions. Instead of manually searching the CLI or README, you can ask the AI natural language questions like:
+
+- "Find agents for TypeScript"
+- "List all security agents"
+- "What does the react-specialist agent do?"
+- "Check if my agents are up to date"
+
+The AI will automatically invoke the appropriate tool and give you structured answers.
+
+## Current Version: Discovery-Only (v1)
+
+Version 1 is **read-only**. The 4 tools let you search, list, and inspect agents, but they don't modify your filesystem. No agents are installed, no files are written — just discovery.
+
+This is intentional. Discovery-first means you stay in control. When you want to install an agent, you use the CLI explicitly.
+
+## Available Tools
+
+| Tool | Purpose |
+|------|--------|
+| `search_agents` | Search by name, description, category, or tag |
+| `list_agents` | List all agents, optionally filtered by category or pack |
+| `get_agent` | Get complete details for a specific agent |
+| `check_health` | Report on installed, outdated, and missing agents |
+
+See [Tools Reference](/plugin/tools) for parameters, return values, and usage examples.
+
+## How It Works
+
+When you configure the plugin in your `opencode.json`, OpenCode loads the 4 tools into the LLM's context. When you ask a question that matches a tool's description, the LLM invokes it automatically.
+
+Example conversation:
+
+```
+You: What agents are available for React?
+
+AI: [invokes search_agents with query="react"]
+Found 3 agents matching "react":
+
+• react-specialist (web) — Expert React developer focused on...
+  tags: frontend, ui, hooks
+
+• nextjs-developer (web) — Next.js specialist for...
+  tags: react, ssr, routing
+
+• ui-designer (web) — UI/UX design specialist...
+  tags: design, react, figma
+```
+
+You don't see the tool invocation — you just get the answer.
+
+## Safety Features
+
+### Readonly Mode
+
+All tools are read-only. They never write to your filesystem:
+
+- `search_agents` reads from the manifest (memory)
+- `list_agents` reads from the manifest (memory)
+- `get_agent` reads from the manifest + lock file (read-only)
+- `check_health` reads lock file + computes hashes (read-only)
+
+The lock system uses a `readonly` mode when called from the plugin. No lock file is created if it doesn't exist.
+
+### Path Sanitization
+
+Error messages sanitize absolute paths. You never see `/Users/username/...` or `C:\Users\...` in tool output — just `…/relative/path`.
+
+This prevents accidental leakage of filesystem structure to the LLM.
+
+### No Namespace Collisions
+
+All internal types are prefixed with `Oc` (e.g., `OcAgentEntry`, `OcManifest`) to avoid collisions with other plugins or your project's types.
+
+## Natural Language Examples
+
+These queries trigger the tools automatically:
+
+- **Search**: "Find agents for TypeScript", "What agents handle Docker?", "Search for security auditing"
+- **List**: "Show all agents", "List AI category", "What's in the backend pack?"
+- **Get**: "Tell me about typescript-pro", "What does debugger do?", "Details on postgres-pro"
+- **Health**: "Check agent health", "Are my agents up to date?", "Show installation status"
+
+You don't need to memorize tool names or parameters — just ask naturally.
+
+## Prerequisites
+
+- **OpenCode** — [Download](https://opencode.ai)
+- **Bun** — TypeScript runtime (no build step required)
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/plugin/installation">
+    Install globally or per-project
+  </Card>
+  <Card title="Tools Reference" icon="wrench" href="/plugin/tools">
+    Full tool signatures and examples
+  </Card>
+</CardGroup>

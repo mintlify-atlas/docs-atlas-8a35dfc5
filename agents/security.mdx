@@ -1,0 +1,189 @@
+---
+title: Security
+description: Security auditing, penetration testing, compliance frameworks, and smart contract analysis
+---
+
+5 specialized agents covering offensive security, compliance, threat modeling, and blockchain security.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="Security Auditor" icon="shield-halved">
+    **Security audits, compliance assessments, and risk evaluations**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: security-audit, compliance, risk, vulnerabilities, assessment
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install security-auditor
+    ```
+  </Card>
+
+  <Card title="Penetration Tester" icon="user-secret">
+    **Offensive security testing, vulnerability exploitation, and risk demos**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: penetration-testing, security, exploitation, vulnerabilities, offensive
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install penetration-tester
+    ```
+  </Card>
+
+  <Card title="Security Engineer" icon="lock">
+    **Threat modeling, secure SDLC, vulnerability management, and security architecture**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: security, threat-modeling, sdlc, vulnerability-management, devsecops
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install security-engineer
+    ```
+  </Card>
+
+  <Card title="Compliance Auditor" icon="clipboard-list">
+    **Compliance framework specialist for SOC2, GDPR, HIPAA, PCI-DSS, and ISO 27001**
+    
+    - Mode: `subagent`
+    - Quality: 4.75/5 (Excellent)
+    - Tags: compliance, soc2, gdpr, hipaa, pci-dss, iso-27001, audit
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install compliance-auditor
+    ```
+  </Card>
+
+  <Card title="Smart Contract Auditor" icon="file-contract">
+    **Smart contract security audits, vulnerability detection, and attack analysis**
+    
+    - Mode: `subagent`
+    - Quality: 4.75/5 (Excellent)
+    - Tags: smart-contracts, blockchain, solidity, security, web3, audit
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install smart-contract-auditor
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Security Audit
+@security/security-auditor Audit this authentication system
+```
+
+```bash Penetration Test
+@security/penetration-tester Test this API for injection vulnerabilities
+```
+
+```bash Compliance
+@security/compliance-auditor Review this for SOC2 Type II readiness
+```
+
+```bash Smart Contracts
+@security/smart-contract-auditor Audit this Solidity contract for reentrancy
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.52/5
+- **3 Excellent, 2 Good** rating
+- **Total tokens**: ~8,600 (avg ~1,720 per agent)
+- **Coverage**: Offensive + defensive + compliance + blockchain
+
+## Common Workflows
+
+<Accordion title="Security Team Pack">
+  Comprehensive security coverage:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack security
+  ```
+  
+  Includes: security-auditor, penetration-tester, smart-contract-auditor, compliance-auditor
+</Accordion>
+
+<Accordion title="Ship It Safely">
+  Security + DevOps + testing:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack ship-it-safely
+  ```
+  
+  Includes: ci-cd-engineer, docker-specialist, kubernetes-specialist, sre-engineer, security-engineer, qa-expert
+</Accordion>
+
+<Accordion title="Security Review Process">
+  1. **Security Engineer** — Threat modeling and architecture review
+  2. **Security Auditor** — Code and configuration audit
+  3. **Penetration Tester** — Offensive testing
+  4. **Compliance Auditor** — Compliance validation (if needed)
+</Accordion>
+
+<Accordion title="Smart Contract Security">
+  1. **Smart Contract Auditor** — Full contract audit
+  2. **Security Engineer** — Threat modeling for contract interactions
+  3. **Penetration Tester** — Exploit scenario testing
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose Security Auditor when...">
+  - Conducting security assessments
+  - Reviewing code for vulnerabilities
+  - Evaluating security posture
+  - Preparing for security certifications
+</Accordion>
+
+<Accordion title="Choose Penetration Tester when...">
+  - Testing application security
+  - Finding exploitable vulnerabilities
+  - Validating security controls
+  - Demonstrating risk to stakeholders
+</Accordion>
+
+<Accordion title="Choose Security Engineer when...">
+  - Designing secure systems
+  - Implementing threat modeling
+  - Building security into SDLC
+  - Vulnerability management
+</Accordion>
+
+<Accordion title="Choose Compliance Auditor when...">
+  - Preparing for SOC2, GDPR, HIPAA, PCI-DSS, ISO 27001
+  - Conducting compliance gap analysis
+  - Implementing compliance controls
+  - Maintaining certification readiness
+</Accordion>
+
+<Accordion title="Choose Smart Contract Auditor when...">
+  - Auditing Solidity contracts
+  - Reviewing DeFi protocols
+  - Detecting reentrancy, overflow, access control issues
+  - Pre-deployment security validation
+</Accordion>
+
+## Security Best Practices
+
+<Note>
+  **All security agents follow responsible disclosure practices**. Use offensive security tools (like penetration testing) only on systems you own or have explicit permission to test.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Defense in Depth" icon="layer-group">
+    Use multiple agents for comprehensive coverage:
+    - **Security Engineer** for architecture
+    - **Security Auditor** for code review
+    - **Penetration Tester** for validation
+  </Card>
+  
+  <Card title="Shift Left Security" icon="arrow-left">
+    Integrate security early:
+    - **Security Engineer** during design
+    - **Code Reviewer** in PRs (with security focus)
+    - **Security Auditor** before deployment
+  </Card>
+</CardGroup>

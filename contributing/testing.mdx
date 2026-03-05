@@ -1,0 +1,594 @@
+---
+title: 'Testing'
+description: 'Run tests, validate agents, and ensure quality with the OpenCode Agents test suite (893 tests)'
+---
+
+## Test Suite Overview
+
+OpenCode Agents has **893 tests** across three test harnesses:
+
+- **560 Node.js tests** — CLI, TUI, registry, installer, lock files
+- **310 Python tests** — Agent quality scoring, sync scripts, manifest validation
+- **23 Plugin tests** — OpenCode plugin tools (requires Bun)
+
+**CI coverage**: Tests run on multiple versions:
+- Python: 3.10, 3.12, 3.13
+- Node.js: 20, 22, 23
+
+## Running Tests
+
+### All Tests
+
+```bash
+# Node.js tests (CLI + TUI + lock)
+npm test
+
+# Python tests
+python3 tests/run_tests.py
+
+# Plugin tests (requires Bun)
+bun test tests/plugin/
+
+# Run everything
+npm test && python3 tests/run_tests.py && bun test tests/plugin/
+```
+
+### Specific Test Suites
+
+#### Node.js Tests
+
+```bash
+# CLI tests only
+node --test tests/cli.test.mjs
+
+# TUI tests only
+node --test tests/tui.test.mjs
+
+# Lock file tests
+node --test tests/lock.test.mjs
+
+# All Node.js tests
+node --test tests/cli.test.mjs tests/tui.test.mjs tests/lock.test.mjs
+```
+
+#### Python Tests
+
+```bash
+# All Python tests via runner
+python3 tests/run_tests.py
+
+# Or use pytest directly for specific test files
+python3 -m pytest tests/test_agents.py -v
+python3 -m pytest tests/test_sync_script.py -v
+python3 -m pytest tests/test_update_manifest.py -v
+python3 -m pytest tests/test_quality_scorer.py -v
+
+# Run a specific test function
+python3 -m pytest tests/test_agents.py::test_agent_frontmatter -v
+
+# Run with coverage report
+python3 -m pytest tests/ --cov=scripts --cov-report=term-missing
+```
+
+#### Plugin Tests
+
+```bash
+# All plugin tests
+bun test tests/plugin/
+
+# Specific test file
+bun test tests/plugin/search_agents.test.ts
+
+# With coverage
+bun test tests/plugin/ --coverage
+```
+
+## Test Organization
+
+### Node.js Tests (`tests/*.test.mjs`)
+
+**`cli.test.mjs`** (200+ tests)
+- CLI argument parsing
+- Agent installation (single, multiple, packs, categories)
+- Search functionality
+- List operations
+- Dry-run mode
+- Force overwrite
+- Error handling
+
+**`tui.test.mjs`** (300+ tests)
+- Screen rendering
+- Input handling (keyboard navigation)
+- State machine transitions
+- Category browsing
+- Search mode
+- Pack detail views
+- Installation flow
+- ANSI escape code generation
+
+**`lock.test.mjs`** (60+ tests)
+- Lock file creation
+- Version tracking
+- Agent installation state
+- Lock file updates
+- Integrity verification
+
+### Python Tests (`tests/*.py`)
+
+**`test_agents.py`** (100+ tests)
+- YAML frontmatter validation
+- Agent file structure
+- Required fields (description, mode, permission)
+- Permission format validation
+- Markdown syntax checks
+
+**`test_quality_scorer.py`** (80+ tests)
+- 8-dimension scoring logic
+- Frontmatter scoring
+- Identity paragraph word count
+- Decision tree detection (IF/THEN)
+- Code block counting
+- Quality gate validation
+- Conciseness scoring
+- Version pinning detection
+- Pass/fail criteria
+
+**`test_sync_script.py`** (60+ tests)
+- HTTP fetching with ETag caching
+- Upstream agent discovery
+- Frontmatter parsing
+- Permission conversion (tools → permission)
+- Dry-run mode
+- Error handling
+
+**`test_update_manifest.py`** (40+ tests)
+- Manifest merging
+- Agent deduplication
+- Category organization
+- NEEDS_REVIEW prefix handling
+- JSON schema validation
+
+**`test_sync_common.py`** (30+ tests)
+- Shared HTTP utilities
+- ETag caching
+- Frontmatter extraction
+- YAML parsing
+- Error handling
+
+### Plugin Tests (`tests/plugin/*.test.ts`)
+
+**`search_agents.test.ts`**
+- Search by name
+- Search by description
+- Search by category
+- Search by tags
+- Fuzzy matching
+
+**`list_agents.test.ts`**
+- List all agents
+- Filter by category
+- Filter by pack
+- Group by category
+
+**`get_agent.test.ts`**
+- Get agent by ID
+- Agent not found handling
+- Typo suggestions
+- Installation status
+
+**`check_health.test.ts`**
+- Registry health report
+- Installed agent detection
+- Missing agent detection
+- Outdated agent detection
+
+## Quality Validation
+
+### Score a Single Agent
+
+```bash
+# Score an agent file
+python3 scripts/quality_scorer.py agents/languages/typescript-pro.md
+```
+
+**Output**:
+```
+============================================================
+  agents/languages/typescript-pro.md
+============================================================
+  frontmatter                    [#####] 5/5
+  identity                       [#####] 5/5
+  decisions                      [#####] 5/5
+  examples                       [####.] 4/5
+  quality_gate                   [#####] 5/5
+  conciseness                    [#####] 5/5
+  no_banned_sections             [#####] 5/5
+  version_pinning                [####.] 4/5
+                                 --------
+  overall                        4.88/5.00
+  label                          Excellent
+  passed                         YES
+```
+
+### Regenerate README Scores
+
+```bash
+# Update README.md and README.en.md with latest scores
+python3 scripts/generate_readme_scores.py
+
+# Check if scores are up to date (CI mode)
+python3 scripts/generate_readme_scores.py --check
+```
+
+**What it does**:
+- Scans all agents in `agents/` directory
+- Runs quality scorer on each agent
+- Calculates average score, pass rate, label distribution
+- Updates `<!-- SCORES:BEGIN -->` ... `<!-- SCORES:END -->` section in both READMEs
+- Generates markdown table with scores, labels, token estimates, line counts
+
+**Important**: Always run this after modifying any agent file. The CI will fail if scores are out of date.
+
+## Linting and Validation
+
+### Syntax Checking
+
+```bash
+# Python syntax
+python3 -c "import ast; ast.parse(open('scripts/quality_scorer.py').read())"
+
+# Node.js syntax
+node --check bin/cli.mjs src/*.mjs src/tui/*.mjs
+
+# Shell script linting
+sudo apt-get install shellcheck
+shellcheck install.sh
+```
+
+### Frontmatter Validation
+
+```bash
+# Validate YAML frontmatter in all agents
+python3 -c "
+import sys, os, re
+
+errors = []
+for root, dirs, files in os.walk('agents'):
+    for fname in files:
+        if not fname.endswith('.md'):
+            continue
+        path = os.path.join(root, fname)
+        with open(path, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+        
+        if not content.startswith('---'):
+            errors.append(f'{path}: missing YAML frontmatter')
+            continue
+        
+        end = content.find('\n---', 3)
+        if end == -1:
+            errors.append(f'{path}: missing closing ---')
+            continue
+        
+        print(f'OK: {path}')
+
+if errors:
+    for e in errors:
+        print(f'ERROR: {e}', file=sys.stderr)
+    sys.exit(1)
+"
+```
+
+### Manifest Validation
+
+```bash
+# Validate manifest.json is valid JSON
+python3 -c "import json; json.load(open('manifest.json'))" && echo "manifest.json is valid"
+
+# Verify manifest matches actual files
+python3 -c "
+import json, os
+
+with open('manifest.json', 'r') as f:
+    manifest = json.load(f)
+
+errors = []
+base = manifest.get('source_path', 'agents')
+
+for agent in manifest['agents']:
+    path = agent['path']
+    md_file = os.path.join(base, path + '.md')
+    if not os.path.isfile(md_file):
+        errors.append(f'Missing file: {md_file}')
+
+if errors:
+    for e in errors:
+        print(f'ERROR: {e}')
+    exit(1)
+else:
+    print(f'All {len(manifest["agents"])} agents have matching files')
+"
+```
+
+### Deprecated Field Detection
+
+```bash
+# Check for deprecated tools: field
+found=0
+while IFS= read -r -d '' f; do
+  frontmatter=$(sed -n '1,/^---$/!d; /^---$/d; p' "$f" | head -50)
+  if echo "$frontmatter" | grep -qP '^tools\s*:'; then
+    echo "ERROR: $f contains deprecated 'tools:' field (use 'permission:' instead)"
+    found=1
+  fi
+done < <(find agents -name '*.md' -print0)
+
+if [ "$found" -eq 1 ]; then
+  exit 1
+fi
+echo "No deprecated tools: field found."
+```
+
+## CI Workflow Tests
+
+The GitHub Actions CI runs automatically on every push and PR. You can replicate the CI locally:
+
+### Test Job (Python)
+
+```bash
+# Simulates the 'test' job
+python3 tests/run_tests.py
+```
+
+Runs on Python 3.10, 3.12, 3.13 in CI.
+
+### Test-CLI Job (Node.js)
+
+```bash
+# Simulates the 'test-cli' job
+node --test tests/cli.test.mjs tests/tui.test.mjs tests/lock.test.mjs
+```
+
+Runs on Node.js 20, 22, 23 in CI.
+
+### Lint Job
+
+```bash
+# Python syntax check
+for f in scripts/sync-agents.py scripts/sync_common.py scripts/update-manifest.py scripts/generate_readme_scores.py; do
+  python3 -c "import ast; ast.parse(open('$f').read())"
+done
+
+# Node.js syntax check
+node --check bin/cli.mjs src/*.mjs src/tui/*.mjs
+
+# Shellcheck
+sudo apt-get install shellcheck
+shellcheck install.sh
+
+# Frontmatter validation (see above)
+
+# Manifest validation
+python3 -c "import json; json.load(open('manifest.json'))"
+
+# README score freshness
+python3 scripts/generate_readme_scores.py --check
+```
+
+### Validate-Agents Job
+
+```bash
+# List upstream agents (discovery mode)
+python3 scripts/sync-agents.py --list
+python3 scripts/sync-agents.py --list --tier=extended
+
+# Check for deprecated tools: field (see above)
+
+# Verify manifest consistency (see above)
+```
+
+## Test Coverage
+
+### Node.js Coverage
+
+Node.js built-in test runner doesn't have native coverage. Use `c8` for coverage:
+
+```bash
+npm install --save-dev c8
+npx c8 node --test tests/cli.test.mjs tests/tui.test.mjs tests/lock.test.mjs
+```
+
+### Python Coverage
+
+```bash
+# Install pytest-cov
+pip install pytest pytest-cov
+
+# Run with coverage
+python3 -m pytest tests/ --cov=scripts --cov-report=html --cov-report=term-missing
+
+# Open HTML report
+open htmlcov/index.html
+```
+
+### Plugin Coverage (Bun)
+
+```bash
+bun test tests/plugin/ --coverage
+```
+
+## Pre-Commit Checklist
+
+Before committing, ensure:
+
+- [ ] All Node.js tests pass: `npm test`
+- [ ] All Python tests pass: `python3 tests/run_tests.py`
+- [ ] Plugin tests pass (if Bun installed): `bun test tests/plugin/`
+- [ ] Quality scores updated: `python3 scripts/generate_readme_scores.py`
+- [ ] README scores are current: `python3 scripts/generate_readme_scores.py --check`
+- [ ] No syntax errors: `node --check bin/cli.mjs src/*.mjs src/tui/*.mjs`
+- [ ] Python syntax valid: `python3 -c "import ast; ast.parse(open('scripts/quality_scorer.py').read())"`
+- [ ] No deprecated `tools:` field in agents
+- [ ] Manifest.json is valid JSON
+- [ ] Frontmatter is valid YAML in all agents
+
+## Debugging Test Failures
+
+### Node.js Test Debugging
+
+```bash
+# Run tests with verbose output
+node --test --test-reporter=spec tests/cli.test.mjs
+
+# Run a specific test
+node --test --test-name-pattern="install single agent" tests/cli.test.mjs
+
+# Use Node.js inspector
+node --inspect-brk --test tests/cli.test.mjs
+```
+
+### Python Test Debugging
+
+```bash
+# Verbose pytest output
+python3 -m pytest tests/test_quality_scorer.py -v -s
+
+# Run a single test
+python3 -m pytest tests/test_quality_scorer.py::test_score_agent_valid -v
+
+# Drop into debugger on failure
+python3 -m pytest tests/ --pdb
+
+# Show local variables on failure
+python3 -m pytest tests/ -l
+```
+
+### Plugin Test Debugging
+
+```bash
+# Verbose output
+bun test tests/plugin/ --verbose
+
+# Specific test file
+bun test tests/plugin/search_agents.test.ts
+```
+
+## Common Test Failures
+
+<AccordionGroup>
+  <Accordion title="README scores out of date">
+    **Error**: `generate_readme_scores.py --check` fails
+    
+    **Fix**:
+    ```bash
+    python3 scripts/generate_readme_scores.py
+    git add README.md README.en.md manifest.json
+    ```
+  </Accordion>
+  
+  <Accordion title="Deprecated tools: field detected">
+    **Error**: Agent uses `tools:` instead of `permission:`
+    
+    **Fix**: Update frontmatter in the agent file:
+    ```yaml
+    # Before
+    tools:
+      - read
+      - write
+    
+    # After
+    permission:
+      read: allow
+      write: allow
+    ```
+  </Accordion>
+  
+  <Accordion title="Quality score too low">
+    **Error**: Agent scores < 3.5 or has dimension < 2
+    
+    **Fix**:
+    ```bash
+    # Check detailed scores
+    python3 scripts/quality_scorer.py agents/your-agent.md
+    
+    # Common issues:
+    # - Identity < 50 words → Expand identity paragraph
+    # - Decisions < 5 rules → Add more IF/THEN rules
+    # - Examples < 3 blocks → Add more code examples
+    # - Quality Gate < 5 items → Add more checklist items
+    ```
+  </Accordion>
+  
+  <Accordion title="Frontmatter YAML invalid">
+    **Error**: YAML parsing fails
+    
+    **Fix**: Validate YAML syntax:
+    ```yaml
+    ---
+    description: "Valid string"
+    mode: subagent
+    permission:
+      read: allow  # Proper indentation
+      write: allow
+    ---
+    ```
+    
+    Common mistakes:
+    - Missing closing `---`
+    - Incorrect indentation (use 2 spaces)
+    - Unquoted strings with special characters
+  </Accordion>
+  
+  <Accordion title="Manifest file mismatch">
+    **Error**: `manifest.json` references non-existent files
+    
+    **Fix**: Regenerate scores to update manifest:
+    ```bash
+    python3 scripts/generate_readme_scores.py
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Performance Testing
+
+While there are no formal performance tests, you can benchmark key operations:
+
+### CLI Performance
+
+```bash
+# Time agent installation
+time npx github:dmicheneau/opencode-template-agent install typescript-pro --dry-run
+
+# Time pack installation
+time npx github:dmicheneau/opencode-template-agent install --pack backend --dry-run
+
+# Time list operation
+time npx github:dmicheneau/opencode-template-agent list
+```
+
+### Quality Scorer Performance
+
+```bash
+# Time single agent scoring
+time python3 scripts/quality_scorer.py agents/languages/typescript-pro.md
+
+# Time full README regeneration (scores all 69 agents)
+time python3 scripts/generate_readme_scores.py
+```
+
+**Expected times** (on modern hardware):
+- Single agent score: ~50ms
+- Full README regeneration: ~3-5 seconds
+- CLI list: ~100ms
+- Pack installation (dry-run): ~200ms
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Adding Agents" icon="plus" href="/contributing/adding-agents">
+    Create high-quality agents with the 4-section format
+  </Card>
+  <Card title="Contributing Overview" icon="code" href="/contributing/overview">
+    Understand the development workflow and CI/CD
+  </Card>
+</CardGroup>

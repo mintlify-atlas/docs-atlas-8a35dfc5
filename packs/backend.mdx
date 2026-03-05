@@ -1,0 +1,241 @@
+---
+title: Backend Essentials Pack
+description: Core agents for backend development with databases, APIs, and testing
+---
+
+## Overview
+
+The **Backend Essentials** pack provides everything you need for production-grade backend development. From database architecture to API design, from Python and TypeScript to debugging and testing — this pack covers the complete backend stack.
+
+Perfect for backend engineers, API developers, and anyone building server-side systems.
+
+## Installation
+
+```bash
+npx github:dmicheneau/opencode-template-agent install --pack backend
+```
+
+## Included Agents
+
+<CardGroup cols={2}>
+  <Card title="postgres-pro" icon="database">
+    **PostgreSQL Expert**
+    
+    Performance optimization, replication, query tuning, indexing strategies, and production troubleshooting
+  </Card>
+  
+  <Card title="redis-specialist" icon="bolt">
+    **Redis Expert**
+    
+    Caching strategies, data structures, pub/sub, clustering, streams, and performance optimization
+  </Card>
+  
+  <Card title="database-architect" icon="diagram-project">
+    **Database Architecture**
+    
+    Data modeling, schema design, scalability patterns, technology selection, and normalization
+  </Card>
+  
+  <Card title="api-architect" icon="plug">
+    **API Design Expert**
+    
+    REST API architecture, design patterns, versioning, rate limiting, and OpenAPI specs
+  </Card>
+  
+  <Card title="python-pro" icon="snake">
+    **Python Expert**
+    
+    Type-safe Python, FastAPI, Django, async patterns, typing, and production systems
+  </Card>
+  
+  <Card title="typescript-pro" icon="code">
+    **TypeScript Expert**
+    
+    Advanced type system, generics, full-stack type safety, Node.js, and React integration
+  </Card>
+  
+  <Card title="debugger" icon="bug">
+    **Debugging Specialist**
+    
+    Bug diagnosis, root cause analysis, error log investigation, and stack trace interpretation
+  </Card>
+  
+  <Card title="test-automator" icon="flask">
+    **Testing Expert**
+    
+    Test frameworks, automation, CI/CD integration, coverage analysis, and E2E testing
+  </Card>
+</CardGroup>
+
+## Who Should Use This Pack?
+
+<AccordionGroup>
+  <Accordion title="Backend Engineers" icon="server">
+    Build robust server-side systems with database optimization, API design, and testing coverage
+  </Accordion>
+  
+  <Accordion title="API Developers" icon="plug">
+    Design and implement scalable REST APIs with proper architecture and documentation
+  </Accordion>
+  
+  <Accordion title="Database Specialists" icon="database">
+    Optimize PostgreSQL and Redis for production, design efficient schemas, and tune queries
+  </Accordion>
+  
+  <Accordion title="Full-Stack Developers (Backend Focus)" icon="layer-group">
+    Strengthen backend skills while maintaining full-stack capabilities
+  </Accordion>
+</AccordionGroup>
+
+## Example Workflow
+
+Here's how the Backend Essentials agents work together on a real project:
+
+<Steps>
+  <Step title="Design the data layer">
+    Use **database-architect** to design your schema and choose between PostgreSQL (relational) and Redis (caching/sessions)
+    
+    ```bash
+    @data-api/database-architect
+    Design a schema for a multi-tenant SaaS application with users, organizations, and billing
+    ```
+  </Step>
+  
+  <Step title="Optimize database performance">
+    Use **postgres-pro** for query optimization and indexing strategies
+    
+    ```bash
+    @data-api/postgres-pro
+    This query is taking 3 seconds. Help me optimize it and add proper indexes
+    ```
+  </Step>
+  
+  <Step title="Implement caching layer">
+    Use **redis-specialist** to design caching patterns and session management
+    
+    ```bash
+    @data-api/redis-specialist
+    Design a caching strategy for API responses with automatic invalidation
+    ```
+  </Step>
+  
+  <Step title="Build the API">
+    Use **api-architect** to design REST endpoints, then implement with **python-pro** or **typescript-pro**
+    
+    ```bash
+    @data-api/api-architect
+    Design a REST API for this e-commerce system with proper versioning
+    
+    @languages/python-pro
+    Implement these endpoints in FastAPI with proper type hints
+    ```
+  </Step>
+  
+  <Step title="Add comprehensive tests">
+    Use **test-automator** to create unit, integration, and E2E tests
+    
+    ```bash
+    @devtools/test-automator
+    Create pytest tests for these API endpoints with fixtures and mocks
+    ```
+  </Step>
+  
+  <Step title="Debug production issues">
+    Use **debugger** to investigate errors and performance bottlenecks
+    
+    ```bash
+    @devtools/debugger
+    This endpoint returns 500 errors intermittently. Here's the stack trace...
+    ```
+  </Step>
+</Steps>
+
+## Key Capabilities
+
+### Database & Persistence
+- PostgreSQL schema design and optimization
+- Redis caching strategies and data structures
+- Query performance tuning
+- Replication and high availability
+- Database migration patterns
+
+### API Development
+- RESTful API design patterns
+- OpenAPI/Swagger documentation
+- Versioning strategies
+- Rate limiting and throttling
+- Error handling and status codes
+
+### Programming Languages
+- Type-safe Python with FastAPI/Django
+- TypeScript for Node.js backends
+- Async/await patterns
+- Dependency injection
+- Configuration management
+
+### Quality Assurance
+- Automated testing (unit, integration, E2E)
+- Test coverage analysis
+- CI/CD test integration
+- Debugging production issues
+- Performance profiling
+
+## Common Use Cases
+
+<Tabs>
+  <Tab title="Building APIs">
+    **Agents:** api-architect → python-pro/typescript-pro → test-automator
+    
+    Design REST APIs with proper architecture, implement in your language of choice, and add comprehensive tests.
+  </Tab>
+  
+  <Tab title="Database Optimization">
+    **Agents:** database-architect → postgres-pro → redis-specialist
+    
+    Design efficient schemas, optimize slow queries, and add caching layers.
+  </Tab>
+  
+  <Tab title="Production Debugging">
+    **Agents:** debugger → postgres-pro → redis-specialist
+    
+    Diagnose production issues, identify slow queries, and optimize caching.
+  </Tab>
+  
+  <Tab title="New Feature Development">
+    **Agents:** database-architect → api-architect → python-pro → test-automator
+    
+    Complete feature development from data model to tested API endpoints.
+  </Tab>
+</Tabs>
+
+## Complementary Agents
+
+Consider adding these agents for expanded capabilities:
+
+- **golang-pro** — If you use Go for backend services
+- **graphql-architect** — For GraphQL APIs instead of REST
+- **sql-pro** — Vendor-agnostic SQL expertise for multiple databases
+- **code-reviewer** — Automated code quality reviews
+- **docker-specialist** — Containerize your backend services
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Install Backend Pack" icon="download">
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install --pack backend
+    ```
+  </Card>
+  
+  <Card title="Explore Individual Agents" icon="users" href="/agents/overview">
+    Browse detailed documentation for each agent
+  </Card>
+  
+  <Card title="DevOps Pack" icon="gears" href="/packs/devops">
+    Deploy your backend with containers and orchestration
+  </Card>
+  
+  <Card title="Full-Stack Pack" icon="layer-group" href="/packs/fullstack">
+    Add frontend development to complete the stack
+  </Card>
+</CardGroup>

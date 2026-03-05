@@ -1,0 +1,249 @@
+---
+title: Permission Management
+description: Control agent access with presets, overrides, and CLI flags
+---
+
+OpenCode Agents uses a layered permission system to control what installed agents can do. Four presets cover common trust levels, and you can apply per-agent or per-permission overrides via CLI flags or saved preferences.
+
+## Permission Model
+
+Each agent declares required permissions in its frontmatter. OpenCode supports 17 permission types:
+
+| Permission | What it controls |
+|------------|------------------|
+| `read` | Read files from disk |
+| `write` | Write new files |
+| `edit` | Modify existing files |
+| `bash` | Execute shell commands |
+| `glob` | Search files by pattern |
+| `grep` | Search file contents |
+| `webfetch` | Download from URLs |
+| `task` | Launch specialized agents |
+| `mcp` | Use MCP servers |
+| `todoread` | Read task lists |
+| `todowrite` | Modify task lists |
+| `distill` | Condense information |
+| `prune` | Remove unused code |
+| `sequentialthinking` | Multi-step reasoning |
+| `memory` | Store context between sessions |
+| `browsermcp` | Control browser via MCP |
+| `skill` | Load specialized skills |
+
+Each permission can be set to:
+- `allow` — grant without asking
+- `ask` — prompt before each use
+- `deny` — block entirely
+
+Some permissions (like `bash` and `task`) support pattern-based rules:
+
+```yaml
+permission:
+  bash:
+    '*': ask
+    'git status*': allow
+    'git diff*': allow
+```
+
+## Presets
+
+Four built-in presets balance security and productivity:
+
+### Strict
+
+Read-only mode. Agents can explore code but not modify anything.
+
+- ✅ `read`, `glob`, `grep`, `todoread`, `todowrite`, `skill`
+- ⚠️ `memory` asks before storing
+- ❌ `write`, `edit`, `bash`, `webfetch`, `task`, `mcp`, `browsermcp`
+
+**Use for:** Code reviews, exploration, learning.
+
+### Balanced (Default)
+
+Prompts for risky operations. Most file operations allowed.
+
+- ✅ `read`, `write`, `edit`, `glob`, `grep`, `webfetch`, `memory`, `skill`
+- ⚠️ `bash` asks except for safe git read commands
+- ⚠️ `mcp` and `browsermcp` ask before use
+- ✅ `task` launches agents without prompting
+
+**Use for:** Daily development, refactoring, feature work.
+
+### Permissive
+
+Minimal prompts. Agents have broad access.
+
+- ✅ All permissions allowed
+- No prompts for `bash`, `mcp`, `browsermcp`
+
+**Use for:** Trusted agents, automation, CI/CD.
+
+### YOLO
+
+Full trust. All permissions granted, no prompts.
+
+- ✅ Everything allowed, no confirmation
+
+Requires typing `CONFIRM` before install to prevent accidental use.
+
+**Use for:** Personal projects, throwaway environments, maximum speed.
+
+## CLI Flags
+
+Control permissions at install time:
+
+### Apply a preset
+
+```bash
+# Install with strict permissions
+npx opencode-agents install typescript-pro --permissions strict
+
+# Install with YOLO (requires confirmation)
+npx opencode-agents install --pack backend --yolo
+```
+
+### Override specific permissions
+
+Format: `[agent:]permission=action`
+
+```bash
+# Allow bash globally
+npx opencode-agents install --permission-override bash=allow
+
+# Deny webfetch for a specific agent
+npx opencode-agents install typescript-pro \
+  --permission-override typescript-pro:webfetch=deny
+
+# Multiple overrides
+npx opencode-agents install --pack backend \
+  --permissions balanced \
+  --permission-override bash=allow \
+  --permission-override mcp=deny
+```
+
+### Save preferences
+
+Make permission choices persistent:
+
+```bash
+# Save preset as default
+npx opencode-agents install --permissions permissive --save-permissions
+
+# Future installs use saved preset
+npx opencode-agents install postgres-pro
+# → uses permissive preset
+```
+
+Preferences are stored in `~/.config/opencode/agent-permissions.json` and apply to all future installs unless overridden.
+
+### Ignore saved preferences
+
+```bash
+# One-time override of saved preferences
+npx opencode-agents install --permissions strict --no-saved-permissions
+```
+
+## Resolution Order
+
+When multiple permission sources conflict, precedence from highest to lowest:
+
+1. **CLI overrides** (`--permission-override`)
+2. **CLI preset** (`--permissions` or `--yolo`)
+3. **Saved preferences** (from previous `--save-permissions`)
+4. **Agent built-in** (from agent's frontmatter)
+
+Example:
+
+```bash
+# Saved preference: permissive preset
+# Agent built-in: bash=ask
+# CLI: --permissions balanced --permission-override bash=allow
+
+# Result: balanced preset + bash=allow override
+# (CLI overrides beat everything)
+```
+
+## Permission Frontmatter
+
+Agents declare permissions in their frontmatter:
+
+```yaml
+---
+name: typescript-pro
+mode: code
+permission:
+  read: allow
+  write: allow
+  edit: allow
+  bash:
+    '*': ask
+    'npm install*': deny
+  glob: allow
+  grep: allow
+  webfetch: allow
+  task:
+    '*': allow
+---
+```
+
+Pattern-based rules use glob-style wildcards:
+- `*` matches any command
+- `git status*` matches `git status`, `git status --short`, etc.
+- More specific patterns take precedence
+
+## Examples
+
+### Conservative review workflow
+
+```bash
+# Install with strict permissions
+npx opencode-agents install code-reviewer --permissions strict
+
+# Agent can read code but not modify
+# Safe for untrusted codebases
+```
+
+### Trusted automation
+
+```bash
+# Install with permissive preset, save as default
+npx opencode-agents install --pack devops \
+  --permissions permissive \
+  --save-permissions
+
+# All future installs use permissive unless overridden
+```
+
+### Per-agent lockdown
+
+```bash
+# Install pack with balanced preset
+# But lock down one specific agent
+npx opencode-agents install --pack backend \
+  --permissions balanced \
+  --permission-override postgres-pro:bash=deny \
+  --permission-override postgres-pro:webfetch=deny
+```
+
+### Emergency full access
+
+```bash
+# YOLO mode for quick prototyping
+npx opencode-agents install --pack startup --yolo
+# → Prompts: Type CONFIRM to enable YOLO mode:
+# → Type: CONFIRM
+# → Installs with all permissions granted
+```
+
+## Security Notes
+
+- Permissions are **enforced at runtime** by OpenCode, not by the installer
+- The installer only writes the permission block to the agent file
+- Agents with `UNKNOWN_PERMISSIONS` (from upstream sync) default to `ask` for risky operations
+- Pattern-based rules are evaluated in order; first match wins
+- Saved preferences affect all agents unless overridden per-install
+
+## Related
+
+- [Lock System](/advanced/lock-system) — Verify installed agent integrity
+- [Architecture](/advanced/architecture) — System design and data flow

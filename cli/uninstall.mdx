@@ -1,0 +1,194 @@
+---
+title: "uninstall"
+description: "Remove installed agents from your project"
+---
+
+Remove one or more agents from `.opencode/agents/`. Supports single agents, categories, packs, and bulk removal.
+
+## Usage
+
+<CodeGroup>
+```bash npm
+npx opencode-agents uninstall <agent>
+```
+
+```bash npx
+npx github:dmicheneau/opencode-template-agent uninstall <agent>
+```
+
+```bash yarn
+yarn dlx opencode-agents uninstall <agent>
+```
+</CodeGroup>
+
+## Uninstall Modes
+
+### Single Agent
+
+Remove a specific agent by name:
+
+```bash
+npx opencode-agents uninstall typescript-pro
+```
+
+The CLI will:
+- Delete `.opencode/agents/<category>/<name>.md` (or root for primary agents)
+- Remove the lock file entry from `.manifest-lock.json`
+- Clean up empty category directories
+- Report "not installed" if the agent doesn't exist on disk
+
+### Category Mode
+
+Remove all agents from one or more categories:
+
+```bash
+# Single category
+npx opencode-agents uninstall --category devops
+
+# Multiple categories (comma or space separated)
+npx opencode-agents uninstall --category devops,security
+npx opencode-agents uninstall --category devops security
+```
+
+**Available categories:** `languages`, `ai`, `web`, `data-api`, `devops`, `devtools`, `security`, `mcp`, `business`, `docs`
+
+### Pack Mode
+
+Remove all agents from one or more packs:
+
+```bash
+# Single pack
+npx opencode-agents uninstall --pack backend
+
+# Multiple packs
+npx opencode-agents uninstall --pack backend,devops
+```
+
+See [list --packs](/cli/list#list-packs) for available packs.
+
+### Uninstall All
+
+Remove every agent in the registry:
+
+```bash
+npx opencode-agents uninstall --all
+```
+
+<Warning>
+This removes all 69 agents and the lock file. The `.opencode/agents/` directory will be empty.
+</Warning>
+
+## Flags
+
+<ParamField path="--dry-run" type="boolean" default="false">
+  Preview what would be removed without deleting any files.
+
+  ```bash
+  npx opencode-agents uninstall --pack backend --dry-run
+  ```
+</ParamField>
+
+## Mutual Exclusivity
+
+These flags cannot be combined:
+
+- `--all` + `--pack`
+- `--all` + `--category`
+- `--pack` + `--category`
+
+The CLI will exit with an error if you attempt to combine them.
+
+## Security
+
+<Info>
+**Symlink protection:** The CLI refuses to delete symlinks. If an agent file is a symlink, `uninstall` will fail with a security error to prevent directory traversal attacks.
+</Info>
+
+## Examples
+
+### Uninstall a single agent
+
+```bash
+npx opencode-agents uninstall postgres-pro
+# Agent "postgres-pro" removed.
+```
+
+### Uninstall a category
+
+```bash
+npx opencode-agents uninstall --category security
+# Uninstalling 5 agents from category "security"...
+# 5 removed, 0 not found, 0 failed
+```
+
+### Uninstall a pack with dry-run
+
+```bash
+npx opencode-agents uninstall --pack devops --dry-run
+# Dry run — no files will be deleted
+#
+# Uninstalling pack "devops" (9 agents)...
+# [dry-run] docker-specialist
+# [dry-run] kubernetes-specialist
+# [dry-run] terraform-specialist
+# [dry-run] aws-specialist
+# [dry-run] ci-cd-engineer
+# [dry-run] linux-admin
+# [dry-run] platform-engineer
+# [dry-run] sre-engineer
+# [dry-run] incident-responder
+#
+# 9 removed, 0 not found, 0 failed
+```
+
+### Uninstall all agents
+
+```bash
+npx opencode-agents uninstall --all
+# Uninstalling all 69 agents...
+# 69 removed, 0 not found, 0 failed
+```
+
+### Uninstall an agent that doesn't exist
+
+```bash
+npx opencode-agents uninstall foobar
+# Agent "foobar" not found.
+# Did you mean: rust-pro, postgres-pro, python-pro?
+```
+
+## Output Summary
+
+After batch uninstallation (category, pack, or all), the CLI prints:
+
+```
+5 removed, 0 not found, 0 failed
+```
+
+- **removed** — Agents successfully deleted from disk
+- **not found** — Agents that were not installed
+- **failed** — Agents that encountered an error during deletion (e.g., permission denied, symlink detected)
+
+## Exit Codes
+
+| Code | Meaning |
+|------|----------|
+| `0` | All agents removed successfully (or not found) |
+| `1` | One or more agents failed to uninstall, or validation error |
+
+## What Gets Deleted
+
+1. **Agent file** — `.opencode/agents/<category>/<name>.md` (or root for primary agents)
+2. **Lock entry** — Corresponding entry in `.manifest-lock.json`
+3. **Empty directories** — Category folders are removed if empty after uninstall
+
+<Info>
+The `.opencode/agents/` directory itself is **not** deleted, even if empty.
+</Info>
+
+## Related Commands
+
+- [install](/cli/install) — Install agents
+- [list](/cli/list) — See what agents are available
+- [verify](/cli/verify) — Check installed agent integrity
+- [rehash](/cli/rehash) — Rebuild lock file from disk

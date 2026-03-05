@@ -1,0 +1,186 @@
+---
+title: Data & API
+description: API design, GraphQL, database architecture, PostgreSQL, Redis, and SQL specialists
+---
+
+6 specialized agents covering API architecture, database design, and data layer optimization.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="API Architect" icon="network-wired">
+    **REST API architecture, design patterns, and developer guidance**
+    
+    - Mode: `subagent`
+    - Quality: 4.75/5 (Excellent)
+    - Tags: api, rest, architecture, design, http, openapi
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install api-architect
+    ```
+  </Card>
+
+  <Card title="GraphQL Architect" icon="project-diagram">
+    **GraphQL schema design, federation, and query performance optimization**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: graphql, federation, schema, api, query-optimization
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install graphql-architect
+    ```
+  </Card>
+
+  <Card title="Database Architect" icon="database">
+    **Database design, data modeling, scalability, and technology selection**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: database, data-modeling, scalability, schema, architecture
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install database-architect
+    ```
+  </Card>
+
+  <Card title="PostgreSQL Pro" icon="elephant">
+    **PostgreSQL performance optimization, replication, and query tuning**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: postgresql, database, sql, replication, performance, query-tuning
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install postgres-pro
+    ```
+  </Card>
+
+  <Card title="Redis Specialist" icon="bolt">
+    **Redis caching, data structures, pub/sub, clustering, and performance**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: redis, caching, pub-sub, clustering, streams, performance
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install redis-specialist
+    ```
+  </Card>
+
+  <Card title="SQL Pro" icon="database">
+    **Vendor-agnostic SQL specialist for query optimization, schema design, migrations, and performance tuning**
+    
+    - Mode: `subagent`
+    - Quality: 4.50/5 (Excellent)
+    - Tags: sql, postgresql, mysql, sqlite, query-optimization, schema-design
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install sql-pro
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash API Design
+@data-api/api-architect Review this REST API design
+```
+
+```bash GraphQL
+@data-api/graphql-architect Implement schema federation
+```
+
+```bash Database
+@data-api/database-architect Design a scalable multi-tenant schema
+```
+
+```bash PostgreSQL
+@data-api/postgres-pro Optimize this slow query with EXPLAIN ANALYZE
+```
+
+```bash Redis
+@data-api/redis-specialist Design a distributed cache strategy
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.67/5
+- **All agents**: Excellent rating
+- **Total tokens**: ~8,500 (avg ~1,410 per agent)
+- **Coverage**: REST, GraphQL, SQL, NoSQL, caching
+
+## Common Workflows
+
+<Accordion title="Backend Stack">
+  Complete backend with database + API + caching:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack backend
+  ```
+  
+  Includes: postgres-pro, redis-specialist, database-architect, api-architect, python-pro, typescript-pro, debugger, test-automator
+</Accordion>
+
+<Accordion title="Data Stack">
+  Full data engineering + analytics:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack data-stack
+  ```
+  
+  Includes: data-engineer, data-analyst, data-scientist, database-architect, postgres-pro, sql-pro
+</Accordion>
+
+<Accordion title="API Layer">
+  Design and implement robust APIs:
+  
+  1. **Database Architect** — Design schema
+  2. **API Architect** or **GraphQL Architect** — Design API layer
+  3. **PostgreSQL Pro** or **SQL Pro** — Optimize queries
+  4. **Redis Specialist** — Add caching layer
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose API Architect when...">
+  - Designing RESTful APIs
+  - Implementing API versioning
+  - Defining OpenAPI specifications
+  - Establishing API conventions
+</Accordion>
+
+<Accordion title="Choose GraphQL Architect when...">
+  - Building GraphQL APIs
+  - Implementing schema federation
+  - Optimizing resolver performance
+  - Designing type-safe schemas
+</Accordion>
+
+<Accordion title="Choose Database Architect when...">
+  - Selecting database technology
+  - Designing data models
+  - Planning for scale (sharding, partitioning)
+  - Multi-tenant architecture
+</Accordion>
+
+<Accordion title="Choose PostgreSQL Pro when...">
+  - Optimizing slow queries
+  - Setting up replication
+  - Tuning database configuration
+  - Implementing advanced PostgreSQL features
+</Accordion>
+
+<Accordion title="Choose Redis Specialist when...">
+  - Implementing caching strategies
+  - Using Redis data structures (streams, sorted sets)
+  - Building pub/sub systems
+  - Setting up Redis clustering
+</Accordion>
+
+<Accordion title="Choose SQL Pro when...">
+  - Working across multiple SQL databases
+  - Writing complex queries
+  - Optimizing query performance
+  - Database migrations
+</Accordion>

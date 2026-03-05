@@ -1,0 +1,264 @@
+---
+title: Documentation
+description: Technical writing, API documentation, diagrams, and documentation engineering
+---
+
+4 specialized agents covering documentation architecture, API references, technical writing, and visual diagrams.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="Technical Writer" icon="pen">
+    **Technical documentation, API references, user guides, and SDK docs**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: technical-writing, documentation, api-reference, user-guides, sdk
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install technical-writer
+    ```
+  </Card>
+
+  <Card title="API Documenter" icon="book">
+    **API documentation, OpenAPI specs, and interactive documentation portals**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: api-docs, openapi, swagger, documentation, code-examples
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install api-documenter
+    ```
+  </Card>
+
+  <Card title="Documentation Engineer" icon="book-open">
+    **Documentation systems architecture including guides, tutorials, and APIs**
+    
+    - Mode: `subagent`
+    - Quality: 4.38/5 (Good)
+    - Tags: documentation, architecture, tutorials, guides, developer-docs
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install documentation-engineer
+    ```
+  </Card>
+
+  <Card title="Diagram Architect" icon="diagram-project">
+    **C4 models, Mermaid diagrams, PlantUML, and architecture visualization**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: diagrams, c4, mermaid, plantuml, architecture, visualization
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install diagram-architect
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Technical Writing
+@docs/technical-writer Write a user guide for authentication
+```
+
+```bash API Documentation
+@docs/api-documenter Generate OpenAPI spec from this code
+```
+
+```bash Architecture Diagrams
+@docs/diagram-architect Create a C4 model for this microservices system
+```
+
+```bash Documentation System
+@docs/documentation-engineer Design a docs site structure
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.47/5
+- **2 Excellent, 2 Good** rating
+- **Total tokens**: ~4,500 (avg ~1,125 per agent)
+- **Coverage**: Writing + API docs + architecture + systems
+
+## Common Workflows
+
+<Accordion title="Architecture & Documentation Pack">
+  Complete documentation + architecture:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack architecture-docs
+  ```
+  
+  Includes: microservices-architect, api-architect, database-architect, diagram-architect, documentation-engineer
+</Accordion>
+
+<Accordion title="API Documentation Workflow">
+  1. **API Architect** — Design API
+  2. **API Documenter** — Write API documentation and OpenAPI spec
+  3. **Technical Writer** — User guides and tutorials
+  4. **Diagram Architect** — API flow diagrams
+</Accordion>
+
+<Accordion title="System Documentation">
+  1. **Diagram Architect** — Architecture diagrams (C4 model)
+  2. **Documentation Engineer** — Documentation site structure
+  3. **Technical Writer** — Guides and tutorials
+  4. **API Documenter** — API reference
+</Accordion>
+
+<Accordion title="Developer Portal">
+  1. **Documentation Engineer** — Information architecture
+  2. **API Documenter** — Interactive API reference
+  3. **Technical Writer** — Getting started guides
+  4. **Diagram Architect** — Visual explanations
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose Technical Writer when...">
+  - Writing user guides and tutorials
+  - Creating SDK documentation
+  - Documenting features for end users
+  - Writing release notes
+  - Creating README files
+</Accordion>
+
+<Accordion title="Choose API Documenter when...">
+  - Writing API reference documentation
+  - Creating OpenAPI/Swagger specs
+  - Building interactive API explorers
+  - Documenting REST/GraphQL APIs
+  - Generating code examples
+</Accordion>
+
+<Accordion title="Choose Documentation Engineer when...">
+  - Designing documentation systems
+  - Building docs-as-code pipelines
+  - Selecting documentation tools (Docusaurus, MkDocs, etc.)
+  - Information architecture
+  - Documentation site maintenance
+</Accordion>
+
+<Accordion title="Choose Diagram Architect when...">
+  - Creating C4 architecture models
+  - Writing Mermaid diagrams
+  - Designing PlantUML diagrams
+  - Visualizing system architecture
+  - Creating flow diagrams
+</Accordion>
+
+## Documentation Types
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="code">
+    **Agent**: API Documenter
+    
+    - OpenAPI/Swagger specs
+    - Endpoint descriptions
+    - Request/response examples
+    - Authentication guides
+  </Card>
+  
+  <Card title="User Guides" icon="book-open">
+    **Agent**: Technical Writer
+    
+    - Getting started tutorials
+    - How-to guides
+    - Concept explanations
+    - Troubleshooting guides
+  </Card>
+  
+  <Card title="Architecture Docs" icon="sitemap">
+    **Agent**: Diagram Architect
+    
+    - C4 models (Context, Container, Component, Code)
+    - Sequence diagrams
+    - Data flow diagrams
+    - Infrastructure diagrams
+  </Card>
+  
+  <Card title="Developer Portal" icon="laptop-code">
+    **Agent**: Documentation Engineer
+    
+    - Site structure and navigation
+    - Search and discovery
+    - Version management
+    - Content organization
+  </Card>
+</CardGroup>
+
+## Integration with Development
+
+<Accordion title="Docs in CI/CD">
+  Integrate documentation into your development workflow:
+  
+  1. **API Documenter** — Generate OpenAPI spec from code
+  2. **Documentation Engineer** — Deploy docs site
+  3. **CI/CD Engineer** — Automate docs builds
+  4. **Code Reviewer** — Review docs in PRs
+</Accordion>
+
+<Accordion title="Docs-as-Code">
+  Treat documentation like code:
+  
+  - Version control (Git)
+  - Code review process
+  - Automated testing (broken links, examples)
+  - CI/CD deployment
+  
+  Use **Documentation Engineer** to set up the system.
+</Accordion>
+
+## Best Practices
+
+<Note>
+  **Documentation quality matters**. Well-written docs reduce support burden, improve developer experience, and accelerate adoption.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Keep Docs Current" icon="rotate">
+    - Update docs in the same PR as code changes
+    - Use automated testing for code examples
+    - Review docs during code review
+  </Card>
+  
+  <Card title="Multiple Formats" icon="layer-group">
+    - Tutorials (learning-oriented)
+    - How-to guides (task-oriented)
+    - Reference (information-oriented)
+    - Explanation (understanding-oriented)
+  </Card>
+</CardGroup>
+
+## Tools & Formats
+
+<Accordion title="Diagram Formats">
+  **Diagram Architect** supports:
+  
+  - **Mermaid** — Text-based diagrams (flowcharts, sequence, ER, C4)
+  - **PlantUML** — UML diagrams
+  - **C4 Model** — Architecture documentation (Context, Container, Component, Code)
+  - **Graphviz** — Graph visualization
+</Accordion>
+
+<Accordion title="Documentation Platforms">
+  **Documentation Engineer** works with:
+  
+  - **Docusaurus** — React-based docs sites
+  - **MkDocs** — Python-based static sites
+  - **GitBook** — Modern documentation platform
+  - **Mintlify** — Beautiful API documentation
+  - **ReadTheDocs** — Open source documentation hosting
+</Accordion>
+
+<Accordion title="API Specification Formats">
+  **API Documenter** supports:
+  
+  - **OpenAPI 3.x** (Swagger) — REST APIs
+  - **GraphQL Schema** — GraphQL APIs
+  - **AsyncAPI** — Event-driven APIs
+  - **JSON Schema** — Data validation
+</Accordion>

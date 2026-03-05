@@ -1,0 +1,428 @@
+---
+title: 'Plugin Tools Reference'
+description: 'Complete reference for the 4 LLM tools exposed by the plugin'
+---
+
+## Overview
+
+The plugin exposes 4 tools that the LLM can invoke automatically when you ask natural language questions. You don't need to call these tools directly — just ask the AI what you want to know.
+
+<Note>
+  All tools are **read-only**. They never modify your filesystem.
+</Note>
+
+---
+
+## search_agents
+
+Search the agent registry by name, description, category, or tag. Returns matching agents with their category and description.
+
+### When to Use
+
+Use this tool when looking for agents that match a specific skill, technology, or keyword.
+
+**Natural language triggers:**
+- "Find agents for TypeScript"
+- "Search for Docker specialists"
+- "What agents handle security auditing?"
+
+### Parameters
+
+<ParamField path="query" type="string" required>
+  Search query — matches against agent name, description, category, and tags.
+
+  Examples: `"typescript"`, `"docker"`, `"security"`
+</ParamField>
+
+### Returns
+
+A formatted string with matching agents:
+
+```
+Found 3 agent(s) matching "react":
+
+• react-specialist (web) — Expert React developer focused on...
+  tags: frontend, ui, hooks
+
+• nextjs-developer (web) — Next.js specialist for...
+  tags: react, ssr, routing
+
+• ui-designer (web) — UI/UX design specialist...
+  tags: design, react, figma
+```
+
+If no agents match, suggests trying a broader term or checking available categories.
+
+### Usage Examples
+
+<CodeGroup>
+
+```text Natural Language
+You: Find agents for Python
+
+AI: [invokes search_agents(query="python")]
+Found 1 agent(s) matching "python":
+
+• python-pro (languages) — Expert Python developer focused on...
+  tags: backend, scripting, data
+```
+
+```text Broader Search
+You: What agents work with databases?
+
+AI: [invokes search_agents(query="database")]
+Found 4 agent(s) matching "database":
+
+• database-architect (data-api) — Database design specialist...
+• postgres-pro (data-api) — PostgreSQL expert...
+• redis-specialist (data-api) — Redis caching expert...
+• sql-pro (data-api) — SQL optimization specialist...
+```
+
+</CodeGroup>
+
+---
+
+## list_agents
+
+List agents in the registry. Without filters, shows all agents grouped by category with counts. Use category or pack filter for detailed view.
+
+<Warning>
+  Cannot use both `category` and `pack` filters at once.
+</Warning>
+
+### When to Use
+
+Use this tool when you want to see all available agents, or filter by category/pack.
+
+**Natural language triggers:**
+- "List all agents"
+- "Show agents in the AI category"
+- "What's in the backend pack?"
+
+### Parameters
+
+<ParamField path="category" type="string" optional>
+  Filter by category ID.
+
+  Valid values: `"web"`, `"ai"`, `"devops"`, `"languages"`, `"data-api"`, `"devtools"`, `"security"`, `"mcp"`, `"business"`, `"docs"`
+</ParamField>
+
+<ParamField path="pack" type="string" optional>
+  Filter by pack name.
+
+  Examples: `"frontend"`, `"backend"`, `"startup"`, `"devops"`
+</ParamField>
+
+### Returns
+
+**Without filters** — compact overview:
+
+```
+📦 Agent Registry — 69 agents across 10 categories
+
+💻 Languages (11) — Programming language specialists
+  typescript-pro, python-pro, golang-pro, rust-pro, ...
+
+🤖 AI (9) — AI engineering and data science
+  ai-engineer, data-scientist, ml-engineer, llm-architect, ...
+
+...
+```
+
+**With category filter** — detailed list:
+
+```
+🔒 Security — 5 agents
+Security auditing and compliance
+
+• security-auditor — Comprehensive security audit specialist
+• penetration-tester — Penetration testing and vulnerability assessment
+• smart-contract-auditor — Blockchain smart contract security
+• security-engineer — Application security engineering
+• compliance-auditor — Regulatory compliance and standards
+```
+
+**With pack filter** — detailed list:
+
+```
+📦 Pack: Backend — 8 agents
+Complete backend development stack
+
+• postgres-pro — PostgreSQL database expert
+• redis-specialist — Redis caching and data structures
+• database-architect — Database design and optimization
+• api-architect — RESTful and GraphQL API design
+• python-pro — Expert Python developer
+• typescript-pro — TypeScript and Node.js specialist
+• debugger — Debugging and troubleshooting
+• test-automator — Test automation and CI/CD
+```
+
+### Usage Examples
+
+<CodeGroup>
+
+```text List All
+You: List all available agents
+
+AI: [invokes list_agents()]
+📦 Agent Registry — 69 agents across 10 categories
+
+💻 Languages (11) — Programming language specialists
+  typescript-pro, python-pro, golang-pro, ...
+
+🤖 AI (9) — AI engineering and data science
+  ai-engineer, data-scientist, ml-engineer, ...
+
+...
+```
+
+```text Filter by Category
+You: Show me all DevOps agents
+
+AI: [invokes list_agents(category="devops")]
+⚙️ DevOps — 9 agents
+Infrastructure and deployment
+
+• docker-specialist — Docker containerization expert
+• kubernetes-specialist — Kubernetes orchestration
+• terraform-specialist — Infrastructure as Code
+• aws-specialist — AWS cloud architecture
+...
+```
+
+```text Filter by Pack
+You: What's in the frontend pack?
+
+AI: [invokes list_agents(pack="frontend")]
+📦 Pack: Frontend — 6 agents
+Complete frontend development stack
+
+• react-specialist — Expert React developer
+• nextjs-developer — Next.js and SSR specialist
+• typescript-pro — TypeScript expert
+...
+```
+
+</CodeGroup>
+
+---
+
+## get_agent
+
+Get complete details about a specific agent: description, tags, category, installation mode, and current install status.
+
+<Tip>
+  If you provide a typo or partial name, this tool suggests alternatives.
+</Tip>
+
+### When to Use
+
+Use this tool when you want full details on a specific agent.
+
+**Natural language triggers:**
+- "Tell me about typescript-pro"
+- "What does the debugger agent do?"
+- "Details on postgres-pro"
+
+### Parameters
+
+<ParamField path="name" type="string" required>
+  Exact agent name (kebab-case).
+
+  Examples: `"typescript-pro"`, `"debugger"`, `"react-specialist"`
+</ParamField>
+
+### Returns
+
+A formatted string with complete agent details:
+
+```
+typescript-pro
+
+Category:    languages (💻 Languages)
+Mode:        primary
+Status:      ✓ installed
+Description: Expert TypeScript developer focused on type-safe code...
+Tags:        typescript, node, backend
+
+Included in packs: backend, frontend, fullstack, startup
+```
+
+**Status values:**
+- `✓ installed` — agent is installed and matches the registry hash
+- `⚠ outdated` — agent is installed but content has been modified
+- `✗ not installed` — agent is in the registry but not on disk
+- `? unknown` — agent is on disk but not tracked in the lock file
+
+### Usage Examples
+
+<CodeGroup>
+
+```text Exact Match
+You: What does typescript-pro do?
+
+AI: [invokes get_agent(name="typescript-pro")]
+typescript-pro
+
+Category:    languages (💻 Languages)
+Mode:        primary
+Status:      ✓ installed
+Description: Expert TypeScript developer focused on type-safe code,
+             modern ECMAScript features, and Node.js best practices.
+Tags:        typescript, node, backend
+
+Included in packs: backend, frontend, fullstack, startup
+```
+
+```text Typo Handling
+You: Tell me about typescript-expert
+
+AI: [invokes get_agent(name="typescript-expert")]
+Agent "typescript-expert" not found. Did you mean:
+  • typescript-pro — Expert TypeScript developer focused on...
+  • swift-expert — Expert Swift developer for iOS/macOS...
+  • vue-expert — Expert Vue.js developer for modern web...
+```
+
+</CodeGroup>
+
+---
+
+## check_health
+
+Health check on agent installation. Reports installed, outdated, missing, and unknown agents. Verifies file integrity against lock file.
+
+<Warning>
+  This tool may take a moment to complete if you have many agents installed, as it computes SHA256 hashes for each file.
+</Warning>
+
+### When to Use
+
+Use this tool when you want to verify your agent installation status.
+
+**Natural language triggers:**
+- "Check agent health"
+- "Are my agents up to date?"
+- "Verify agent installation"
+
+### Parameters
+
+None. This tool takes no arguments.
+
+### Returns
+
+A formatted health report:
+
+```
+Agent Health Report
+
+Summary:
+  ✓ 23 installed (hashes match)
+  ⚠ 2 outdated (content modified since install)
+  ✗ 46 not installed
+  ? 1 unknown (on disk but not tracked)
+
+Outdated agents:
+  • typescript-pro
+  • debugger
+
+Unknown agents:
+  • custom-agent
+
+Integrity: ✓ 23 OK · ⚠ 2 mismatched · ✗ 0 missing from disk
+```
+
+**Summary fields:**
+- **Installed** — agents match the registry hash (no modifications)
+- **Outdated** — agents on disk have been modified since installation
+- **Not installed** — agents in the registry but not on disk
+- **Unknown** — agents on disk but not tracked in the lock file (custom agents)
+
+**Integrity:**
+- **OK** — lock entry exists and hash matches
+- **Mismatched** — lock entry exists but hash doesn't match (file was edited)
+- **Missing from disk** — lock entry exists but file is gone
+
+### Usage Examples
+
+<CodeGroup>
+
+```text Health Check
+You: Check if my agents are up to date
+
+AI: [invokes check_health()]
+Agent Health Report
+
+Summary:
+  ✓ 23 installed (hashes match)
+  ⚠ 2 outdated (content modified since install)
+  ✗ 46 not installed
+  ? 0 unknown (on disk but not tracked)
+
+Outdated agents:
+  • typescript-pro
+  • debugger
+
+Integrity: ✓ 23 OK · ⚠ 2 mismatched · ✗ 0 missing from disk
+
+You may want to reinstall the outdated agents to get the latest versions.
+```
+
+```text Clean Installation
+You: Verify agent installation
+
+AI: [invokes check_health()]
+Agent Health Report
+
+Summary:
+  ✓ 15 installed (hashes match)
+  ⚠ 0 outdated (content modified since install)
+  ✗ 54 not installed
+  ? 0 unknown (on disk but not tracked)
+
+Integrity: ✓ 15 OK · ⚠ 0 mismatched · ✗ 0 missing from disk
+
+All installed agents are up to date.
+```
+
+</CodeGroup>
+
+---
+
+## Response Fields
+
+All tools return **formatted strings**, not JSON. This is intentional — the LLM reads the formatted output and presents it to you naturally.
+
+<ResponseField name="Formatted String" type="string">
+  Human-readable text with ANSI-like formatting (icons, indentation, bullet points).
+
+  The LLM interprets this output and rephrases it conversationally.
+</ResponseField>
+
+---
+
+## Error Handling
+
+All tools sanitize errors to avoid leaking filesystem structure:
+
+- Absolute paths are replaced with `…/` or `…\`
+- Windows drives (`C:\`) become `…\`
+- UNC paths (`\\server\`) become `…\`
+- Deep Unix paths (`/a/b/c/d/e`) become `…/`
+
+You'll never see your full filesystem path in tool output.
+
+---
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/plugin/installation">
+    Install the plugin globally or per-project
+  </Card>
+  <Card title="Plugin Overview" icon="book" href="/plugin/overview">
+    Learn how the plugin works
+  </Card>
+</CardGroup>

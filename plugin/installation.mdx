@@ -1,0 +1,224 @@
+---
+title: 'Plugin Installation'
+description: 'Install the OpenCode plugin globally or per-project'
+---
+
+## Prerequisites
+
+Before installing the plugin, make sure you have:
+
+- **OpenCode** installed ([download](https://opencode.ai))
+- **Bun** runtime for TypeScript execution (no build step required)
+
+<Note>
+  The plugin uses Bun to transpile TypeScript on the fly. OpenCode automatically detects Bun-compatible plugins.
+</Note>
+
+## Installation Methods
+
+You can install the plugin **globally** (available in all OpenCode sessions) or **per-project** (available only in a specific project).
+
+### Global Installation (Recommended)
+
+Global installation makes the plugin available in every OpenCode session, regardless of which directory you're working in.
+
+<Steps>
+  <Step title="Create the config directory">
+    If it doesn't exist, create the OpenCode config directory:
+
+    ```bash
+    mkdir -p ~/.config/opencode
+    ```
+  </Step>
+
+  <Step title="Edit opencode.json">
+    Open or create `~/.config/opencode/opencode.json` and add the plugin:
+
+    ```json
+    {
+      "plugin": ["github:dmicheneau/opencode-template-agent"]
+    }
+    ```
+
+    <Tip>
+      If you already have other plugins configured, add the new entry to the existing `plugin` array.
+    </Tip>
+  </Step>
+
+  <Step title="Restart OpenCode">
+    Close and reopen your OpenCode session. The plugin is now active.
+
+    You can verify by asking the AI:
+    ```
+    List all available agents
+    ```
+
+    The AI should invoke the `list_agents` tool and return the full agent catalog.
+  </Step>
+</Steps>
+
+### Per-Project Installation
+
+Per-project installation limits the plugin to a specific project directory. Useful when you only need agent discovery in certain codebases.
+
+<Steps>
+  <Step title="Create the project config directory">
+    In your project root, create the OpenCode config directory:
+
+    ```bash
+    mkdir -p .opencode
+    ```
+  </Step>
+
+  <Step title="Edit opencode.json">
+    Create or edit `.opencode/opencode.json` in your project root:
+
+    ```json
+    {
+      "plugin": ["github:dmicheneau/opencode-template-agent"]
+    }
+    ```
+  </Step>
+
+  <Step title="Restart OpenCode in the project">
+    Open OpenCode in this project directory. The plugin is active only for this project.
+  </Step>
+</Steps>
+
+## Configuration Examples
+
+### Single Plugin
+
+If this is your only plugin:
+
+```json
+{
+  "plugin": ["github:dmicheneau/opencode-template-agent"]
+}
+```
+
+### Multiple Plugins
+
+If you have other plugins installed:
+
+```json
+{
+  "plugin": [
+    "github:dmicheneau/opencode-template-agent",
+    "npm:some-other-plugin",
+    "./local-plugin"
+  ]
+}
+```
+
+<Note>
+  OpenCode supports multiple plugin sources:
+  - `github:owner/repo` — GitHub repository
+  - `npm:package-name` — npm package
+  - `./relative/path` — Local directory
+</Note>
+
+## Verifying Installation
+
+Once installed, you can test the plugin by asking the AI:
+
+```
+Search for TypeScript agents
+```
+
+The AI should respond with a list of agents matching "TypeScript" by invoking the `search_agents` tool.
+
+If you get an error or no response, check:
+
+1. **Config file path** — make sure `opencode.json` is in the right location
+2. **JSON syntax** — validate your JSON (trailing commas are not allowed)
+3. **Bun installation** — run `bun --version` to verify Bun is installed
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Plugin not loading">
+    **Check the config file path:**
+    - Global: `~/.config/opencode/opencode.json`
+    - Per-project: `.opencode/opencode.json` at project root
+
+    **Validate JSON syntax:**
+    ```bash
+    cat ~/.config/opencode/opencode.json | bun x jsonlint
+    ```
+
+    **Restart OpenCode** after making changes.
+  </Accordion>
+
+  <Accordion title="Tools not responding">
+    **Verify Bun is installed:**
+    ```bash
+    bun --version
+    ```
+
+    If not installed, follow the [Bun installation guide](https://bun.sh/docs/installation).
+
+    **Check plugin array syntax:**
+    ```json
+    {
+      "plugin": ["github:dmicheneau/opencode-template-agent"]
+    }
+    ```
+
+    Not:
+    ```json
+    {
+      "plugin": "github:dmicheneau/opencode-template-agent"
+    }
+    ```
+
+    The `plugin` field must be an **array**, even for a single plugin.
+  </Accordion>
+
+  <Accordion title="Wrong agent data returned">
+    The plugin reads from the **manifest.json** in the GitHub repository. If you see outdated data:
+
+    1. The repository might have updated agents
+    2. OpenCode might be caching the plugin
+
+    **Force a refresh:**
+    - Remove the plugin from `opencode.json`
+    - Restart OpenCode
+    - Re-add the plugin
+    - Restart OpenCode again
+  </Accordion>
+</AccordionGroup>
+
+## Uninstalling
+
+To remove the plugin:
+
+<Steps>
+  <Step title="Remove from config">
+    Edit `opencode.json` and remove the plugin entry:
+
+    ```json
+    {
+      "plugin": [
+        // Remove this line:
+        // "github:dmicheneau/opencode-template-agent"
+      ]
+    }
+    ```
+  </Step>
+
+  <Step title="Restart OpenCode">
+    Close and reopen OpenCode. The plugin is now unloaded.
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Tools Reference" icon="wrench" href="/plugin/tools">
+    Learn about the 4 available tools
+  </Card>
+  <Card title="Plugin Overview" icon="book" href="/plugin/overview">
+    Understand how the plugin works
+  </Card>
+</CardGroup>

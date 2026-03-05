@@ -1,0 +1,418 @@
+---
+title: Quality Scoring System
+description: 8-dimension quality assessment for AI agent templates
+---
+
+Every agent in the registry is evaluated on **8 quality dimensions** using `scripts/quality_scorer.py`. The scoring system enforces the optimized agent format and ensures consistent quality across the catalog.
+
+## Scoring Dimensions
+
+Each dimension is scored 1-5. Higher is better.
+
+### 1. Frontmatter
+
+**What it measures:** Presence of required metadata fields.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | All 3 fields present: `description`, `mode`, `permission` block |
+| 3 | 2 out of 3 fields present |
+| 1 | Fewer than 2 fields |
+
+**Example (5/5):**
+
+```yaml
+---
+description: Expert TypeScript developer specializing in type safety
+mode: code
+permission:
+  read: allow
+  write: allow
+  edit: allow
+  bash:
+    '*': ask
+  glob: allow
+---
+```
+
+### 2. Identity
+
+**What it measures:** Unheaded paragraph between frontmatter and first `##` heading.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | 50-300 words |
+| 3 | 30-400 words |
+| 2 | More than 0 words (outside range) |
+| 1 | Empty or missing |
+
+**Why it matters:** Identity establishes role, expertise level, and context. Too short lacks substance; too long is verbose.
+
+**Example (5/5):**
+
+```markdown
+---
+# frontmatter
+---
+
+You are an expert TypeScript engineer with deep knowledge of the
+TypeScript 5.x type system, focusing on type safety, inference,
+and compile-time correctness. You prioritize strict mode, exhaustive
+type checking, and minimal use of `any`. You stay current with
+TypeScript 5.x features (2024+) and recommend modern patterns.
+
+## Decisions
+...
+```
+
+### 3. Decisions
+
+**What it measures:** `## Decisions` section with structured IF/THEN logic.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | 5+ decision rules (IF/THEN/ELIF/ELSE keywords or patterns) |
+| 3 | 2-4 decision rules |
+| 2 | Section exists but fewer than 2 rules |
+| 1 | Section missing |
+
+**Detection:**
+- Line-based: `IF`, `THEN`, `ELIF`, `ELSE` as whole words
+- Inline patterns: `IF x → THEN y`
+- Case-insensitive
+
+**Example (5/5):**
+
+```markdown
+## Decisions
+
+- IF user code uses `any`, THEN suggest strict type or generic
+- IF function lacks return type, THEN add explicit annotation
+- IF type can be inferred, THEN omit annotation (don't over-annotate)
+- IF union type is complex (3+ members), THEN extract to type alias
+- IF code uses `as` cast, THEN validate necessity or use type guard
+```
+
+### 4. Examples
+
+**What it measures:** `## Examples` section with fenced code blocks.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | 3+ code blocks |
+| 4 | 2 code blocks |
+| 3 | 1 code block |
+| 2 | Section exists but no code blocks |
+| 1 | Section missing |
+
+**Code block** = pair of ` ``` ` fences (opening + closing).
+
+**Example (5/5):**
+
+```markdown
+## Examples
+
+### Strict null check
+
+```typescript
+// Before
+function getUser(id: string) {
+  return users.find(u => u.id === id);
+}
+
+// After
+function getUser(id: string): User | undefined {
+  return users.find(u => u.id === id);
+}
+```
+
+### Discriminated union
+
+```typescript
+type Result<T> =
+  | { ok: true; value: T }
+  | { ok: false; error: string };
+
+function handleResult<T>(result: Result<T>) {
+  if (result.ok) {
+    console.log(result.value);
+  } else {
+    console.error(result.error);
+  }
+}
+```
+
+### Type guard
+
+```typescript
+function isString(x: unknown): x is string {
+  return typeof x === 'string';
+}
+```
+```
+
+### 5. Quality Gate
+
+**What it measures:** `## Quality Gate` section with validation criteria.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | 5+ bullet points |
+| 4 | 3-4 bullet points |
+| 3 | 1-2 bullet points |
+| 2 | Section exists but no bullets |
+| 1 | Section missing |
+
+**Bullet point** = line starting with `-` or `*` followed by content.
+
+**Example (5/5):**
+
+```markdown
+## Quality Gate
+
+- All functions have explicit return types
+- No `any` types in production code (test mocks allowed)
+- `strict: true` in tsconfig.json
+- No TypeScript errors in build output
+- Complex unions (3+ members) use type aliases
+- Type guards preferred over `as` casts
+```
+
+### 6. Conciseness
+
+**What it measures:** Body line count and filler phrase density.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | 70-120 lines, ≤3% filler |
+| 4 | 50-150 lines, ≤8% filler |
+| 3 | 40-200 lines, ≤15% filler |
+| 2 | Outside range but ≥30 lines |
+| 1 | Fewer than 30 lines |
+
+**Filler phrases** (detected case-insensitive):
+- "it is important"
+- "note that"
+- "please ensure"
+- "keep in mind"
+- "remember to"
+- "as mentioned"
+- "in order to"
+
+**Why it matters:** Agents should be dense and actionable. Generic advice adds noise.
+
+### 7. No Banned Sections
+
+**What it measures:** Absence of old format headings.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | No banned sections |
+| 3 | 1 banned section |
+| 1 | 2+ banned sections |
+
+**Banned headings** (any level `#`, `##`, `###`):
+- `Workflow`
+- `Tools`
+- `Anti-patterns`
+- `Collaboration`
+
+The optimized format uses **Decisions**, **Examples**, and **Quality Gate** instead.
+
+### 8. Version Pinning
+
+**What it measures:** Version numbers or years in the identity paragraph.
+
+| Score | Criteria |
+|-------|----------|
+| 5 | Both version and year present |
+| 4 | Either version or year present |
+| 2 | Neither present |
+
+**Version patterns:**
+- `5.x`, `3.11+`, `v2`, `>=4.0`, `~=1.2`
+
+**Year patterns:**
+- `2020`-`2039` (four-digit years)
+
+**Why it matters:** Version pinning clarifies which features are available and prevents outdated advice.
+
+**Not all agents need versions** (e.g., `prd`, `scrum-master`), so absence scores 2, not 1.
+
+## Overall Score and Pass Criteria
+
+The overall score is the **mean of all 8 dimensions**, rounded to 2 decimals.
+
+**Pass criteria (both must be true):**
+
+1. Overall score ≥ **3.5**
+2. No dimension < **2**
+
+This ensures balanced quality — an agent can't pass with one critically weak dimension.
+
+## Score Labels
+
+| Label | Range |
+|-------|-------|
+| **Excellent** | ≥ 4.5 |
+| **Good** | 3.5 - 4.49 |
+| **Needs improvement** | 2.5 - 3.49 |
+| **Poor** | < 2.5 |
+
+## Running the Scorer
+
+### Single agent
+
+```bash
+python3 scripts/quality_scorer.py agents/languages/typescript-pro.md
+```
+
+Output:
+
+```
+============================================================
+  agents/languages/typescript-pro.md
+============================================================
+  frontmatter                    [#####] 5/5
+  identity                       [#####] 5/5
+  decisions                      [#####] 5/5
+  examples                       [####.] 4/5
+  quality_gate                   [#####] 5/5
+  conciseness                    [#####] 5/5
+  no_banned_sections             [#####] 5/5
+  version_pinning                [#####] 5/5
+                                 --------
+  overall                        4.88/5.00
+  label                          Excellent
+  passed                         YES
+```
+
+### Multiple agents
+
+```bash
+python3 scripts/quality_scorer.py agents/languages/*.md
+```
+
+Exit code:
+- `0` if all agents pass
+- `1` if any agent fails
+
+### Batch scoring
+
+Regenerate README score tables:
+
+```bash
+python3 scripts/generate_readme_scores.py
+```
+
+This:
+1. Scans all agents in `agents/`
+2. Scores each with `quality_scorer.py`
+3. Regenerates score tables in `README.md` and `README.en.md`
+4. Preserves content outside `<!-- SCORES:BEGIN -->` / `<!-- SCORES:END -->` markers
+
+**CI integration:**
+
+```bash
+# Check that README scores are up to date
+python3 scripts/generate_readme_scores.py --check
+# → Exit 1 if scores don't match
+```
+
+## Catalog Statistics
+
+Current quality metrics (69 agents):
+
+- **Average score:** 4.59/5
+- **Pass rate:** 100%
+- **Excellent:** 49 agents (≥ 4.5)
+- **Good:** 20 agents (3.5 - 4.49)
+- **Needs improvement:** 0 agents
+- **Poor:** 0 agents
+
+Top scores: `llm-architect`, `golang-pro`, `java-architect`, `kotlin-specialist`, `php-pro`, `python-pro`, `rails-expert`, `rust-pro`, `swift-expert`, `typescript-pro`, `mcp-developer` — all **4.88/5**.
+
+## Adding New Agents
+
+When creating or modifying an agent:
+
+1. Write agent following the optimized format:
+   - Frontmatter with `description`, `mode`, `permission`
+   - Identity paragraph (50-300 words)
+   - `## Decisions` with IF/THEN rules
+   - `## Examples` with code blocks
+   - `## Quality Gate` with validation criteria
+
+2. Score the agent:
+   ```bash
+   python3 scripts/quality_scorer.py agents/new-category/new-agent.md
+   ```
+
+3. Iterate until score ≥ 3.5 with no dimension < 2
+
+4. Regenerate README scores:
+   ```bash
+   python3 scripts/generate_readme_scores.py
+   ```
+
+5. Commit agent file **and** updated READMEs together
+
+## Common Issues
+
+### Low identity score
+
+**Problem:** Identity paragraph too short or too long.
+
+**Fix:** Aim for 50-300 words. Include role, expertise level, version context, and focus areas.
+
+### Low decisions score
+
+**Problem:** Decisions section lacks structured rules.
+
+**Fix:** Use explicit IF/THEN patterns. Example:
+
+```markdown
+## Decisions
+
+- IF function is pure, THEN mark with JSDoc `@pure`
+- IF side effect is unavoidable, THEN document in comment
+- IF parameter has default, THEN use ES6 default syntax
+```
+
+### Low examples score
+
+**Problem:** Fewer than 2 code blocks.
+
+**Fix:** Add 2-3 fenced code examples showing before/after or common patterns.
+
+### Low conciseness score
+
+**Problem:** Too many lines or high filler density.
+
+**Fix:** Cut generic advice. Remove phrases like "it is important to note that". Aim for 70-120 lines.
+
+### Banned sections detected
+
+**Problem:** Old format headings (`Workflow`, `Tools`, `Anti-patterns`, `Collaboration`).
+
+**Fix:** Remove those sections. Move relevant content to `Decisions` or `Examples`.
+
+## Why These 8 Dimensions?
+
+The scoring system enforces the **optimized agent format** developed through iterative refinement:
+
+- **Frontmatter** ensures discoverability and permission safety
+- **Identity** establishes expertise and context
+- **Decisions** provides structured, actionable rules (IF/THEN trees)
+- **Examples** shows concrete application
+- **Quality Gate** defines success criteria
+- **Conciseness** prevents bloat and generic advice
+- **No Banned Sections** removes old format cruft
+- **Version Pinning** keeps advice current
+
+This format produces agents that score **8-9/10** in practice, compared to **3-4/10** for generic templates.
+
+## Related
+
+- [Architecture](/advanced/architecture) — System design and data flow
+- [Permissions](/advanced/permissions) — Control agent access

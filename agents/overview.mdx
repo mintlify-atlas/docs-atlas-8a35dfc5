@@ -1,0 +1,139 @@
+---
+title: Agent Catalog Overview
+description: Browse 69 specialized AI agents for OpenCode, organized by domain and expertise
+---
+
+The OpenCode Agent Catalog provides **69 specialized AI agents** covering languages, frameworks, infrastructure, security, AI/ML, and business domains. Each agent follows a standardized expert format with identity, decision trees, examples, and quality gates.
+
+## Agent Format
+
+Every agent is a markdown file with YAML frontmatter containing:
+
+- **Description** — What the agent specializes in
+- **Mode** — Where it can run (`primary`, `subagent`, or `all`)
+- **Permission** — Required tool access (e.g., `readonly`, `edit`, `full`)
+- **Tags** — Searchable keywords
+
+The agent body follows a 4-section structure:
+
+1. **Identity** — Role definition, expertise scope, and version context
+2. **Decisions** — IF/THEN decision trees for common scenarios
+3. **Examples** — Code samples showing best practices
+4. **Quality Gate** — Validation criteria before delivering work
+
+## Quality Scoring
+
+All agents are evaluated on 8 dimensions (1-5 scale):
+
+| Dimension | What's Measured | Excellent (5/5) |
+|-----------|-----------------|------------------|
+| Frontmatter | Required metadata fields | All 3 fields present |
+| Identity | Clear role paragraph | 50-300 words |
+| Decisions | Decision trees with IF/THEN | ≥ 5 rules |
+| Examples | Code samples | ≥ 3 examples |
+| Quality Gate | Validation criteria | ≥ 5 criteria |
+| Conciseness | Line count and filler ratio | 70-120 lines, ≤ 3% filler |
+| No banned sections | Absence of deprecated sections | 0 legacy sections |
+| Version pinning | References to specific versions | Version + year present |
+
+**Pass threshold**: Average ≥ 3.5 AND no dimension < 2
+
+**Current stats**: 69 agents · 4.59/5 average · 100% pass rate · 49 Excellent, 20 Good
+
+## Categories
+
+Agents are organized into 10 categories:
+
+<CardGroup cols={2}>
+  <Card title="Languages" icon="code" href="/agents/languages">
+    11 agents for TypeScript, Python, Go, Rust, Java, and more
+  </Card>
+  <Card title="AI & Machine Learning" icon="robot" href="/agents/ai-ml">
+    9 agents for AI systems, ML pipelines, and LLM architecture
+  </Card>
+  <Card title="Web & Mobile" icon="globe" href="/agents/web-mobile">
+    9 agents for React, Next.js, Vue, Angular, and mobile development
+  </Card>
+  <Card title="Data & API" icon="database" href="/agents/data-api">
+    6 agents for API design, databases, GraphQL, and Redis
+  </Card>
+  <Card title="DevOps & Infrastructure" icon="server" href="/agents/devops">
+    9 agents for Docker, Kubernetes, Terraform, AWS, and CI/CD
+  </Card>
+  <Card title="DevTools" icon="wrench" href="/agents/devtools">
+    8 agents for code review, debugging, testing, and refactoring
+  </Card>
+  <Card title="Security" icon="shield" href="/agents/security">
+    5 agents for security audits, penetration testing, and compliance
+  </Card>
+  <Card title="MCP" icon="plug" href="/agents/mcp">
+    2 agents for Model Context Protocol server development
+  </Card>
+  <Card title="Business & Management" icon="chart-bar" href="/agents/business">
+    6 agents for product management, Scrum, and UX research
+  </Card>
+  <Card title="Documentation" icon="book" href="/agents/docs">
+    4 agents for technical writing, API docs, and diagrams
+  </Card>
+</CardGroup>
+
+## Installation
+
+Install agents using the OpenCode CLI:
+
+```bash
+# Install a specific agent
+npx github:dmicheneau/opencode-template-agent install typescript-pro
+
+# Install a category
+npx github:dmicheneau/opencode-template-agent install --category languages
+
+# Install a pack (curated bundles)
+npx github:dmicheneau/opencode-template-agent install --pack backend
+```
+
+Or use the interactive TUI:
+
+```bash
+npx github:dmicheneau/opencode-template-agent tui
+```
+
+## Agent Modes
+
+- **primary** — Designed to be your main assistant for a session
+- **subagent** — Specialized expert invoked via `@category/name`
+- **all** — Works in both modes
+
+## FAQ
+
+<Accordion title="How do I invoke an agent?">
+  Use the format `@category/agent-name` in OpenCode:
+  
+  ```
+  @languages/typescript-pro Review this API client code
+  @security/security-auditor Audit this authentication flow
+  ```
+</Accordion>
+
+<Accordion title="Can I use multiple agents together?">
+  Yes. OpenCode supports multi-agent workflows. For example:
+  
+  ```
+  @web/react-specialist Build the component
+  @devtools/test-automator Write tests for it
+  @devtools/code-reviewer Review both
+  ```
+</Accordion>
+
+<Accordion title="What's the difference between agents and packs?">
+  - **Agents** are individual specialists (e.g., `typescript-pro`)
+  - **Packs** are curated bundles of agents for common workflows (e.g., `backend` includes postgres-pro, redis-specialist, api-architect, etc.)
+</Accordion>
+
+<Accordion title="How often are agents updated?">
+  Agents are curated manually and updated when new best practices, framework versions, or tooling evolves. The quality scoring system ensures all agents maintain high standards.
+</Accordion>
+
+<Accordion title="Can I create custom agents?">
+  Yes. Create a markdown file in `.opencode/agents/<category>/<name>.md` following the 4-section format. See the [source repository](https://github.com/dmicheneau/opencode-template-agent) for templates.
+</Accordion>

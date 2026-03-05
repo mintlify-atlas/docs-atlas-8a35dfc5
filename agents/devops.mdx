@@ -1,0 +1,227 @@
+---
+title: DevOps & Infrastructure
+description: CI/CD, containers, orchestration, cloud infrastructure, and reliability engineering agents
+---
+
+9 specialized agents covering the full DevOps lifecycle from containerization to production operations.
+
+## Agents
+
+<CardGroup cols={2}>
+  <Card title="Docker Specialist" icon="docker">
+    **Docker containers, multi-stage builds, image optimization, and security**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: docker, containers, docker-compose, images, security, optimization
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install docker-specialist
+    ```
+  </Card>
+
+  <Card title="Kubernetes Specialist" icon="dharmachakra">
+    **Kubernetes cluster design, deployment, and production troubleshooting**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: kubernetes, k8s, containers, orchestration, helm, production
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install kubernetes-specialist
+    ```
+  </Card>
+
+  <Card title="Terraform Specialist" icon="layer-group">
+    **Terraform modules, state management, and Infrastructure as Code**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: terraform, iac, infrastructure, state-management, hcl, providers
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install terraform-specialist
+    ```
+  </Card>
+
+  <Card title="AWS Specialist" icon="aws">
+    **AWS infrastructure, cost optimization, and Well-Architected compliance**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: aws, cloud, iac, cost-optimization, security, well-architected
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install aws-specialist
+    ```
+  </Card>
+
+  <Card title="CI/CD Engineer" icon="circle-nodes">
+    **CI/CD pipeline design with GitHub Actions, GitLab CI, and Jenkins**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: ci-cd, github-actions, gitlab-ci, jenkins, deployment, automation
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install ci-cd-engineer
+    ```
+  </Card>
+
+  <Card title="Linux Admin" icon="linux">
+    **Linux server administration, systemd, networking, and security hardening**
+    
+    - Mode: `subagent`
+    - Quality: 4.62/5 (Excellent)
+    - Tags: linux, sysadmin, systemd, networking, shell, security
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install linux-admin
+    ```
+  </Card>
+
+  <Card title="Platform Engineer" icon="server">
+    **Internal Developer Platforms, golden paths, GitOps, and developer self-service**
+    
+    - Mode: `subagent`
+    - Quality: 4.88/5 (Excellent)
+    - Tags: platform-engineering, idp, gitops, kubernetes, observability, developer-experience
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install platform-engineer
+    ```
+  </Card>
+
+  <Card title="SRE Engineer" icon="chart-line">
+    **SLOs, error budgets, incident management, and production reliability**
+    
+    - Mode: `subagent`
+    - Quality: 4.38/5 (Good)
+    - Tags: sre, reliability, slo, error-budget, incident-management, observability
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install sre-engineer
+    ```
+  </Card>
+
+  <Card title="Incident Responder" icon="fire-extinguisher">
+    **Incident response specialist for triage, mitigation, communication, and postmortem**
+    
+    - Mode: `subagent`
+    - Quality: 4.25/5 (Good)
+    - Tags: incident-response, triage, mitigation, postmortem, production, on-call
+    
+    ```bash
+    npx github:dmicheneau/opencode-template-agent install incident-responder
+    ```
+  </Card>
+</CardGroup>
+
+## Usage Examples
+
+<CodeGroup>
+```bash Docker
+@devops/docker-specialist Optimize this Dockerfile for production
+```
+
+```bash Kubernetes
+@devops/kubernetes-specialist Debug this pod crash loop
+```
+
+```bash Terraform
+@devops/terraform-specialist Design a reusable module for VPC
+```
+
+```bash AWS
+@devops/aws-specialist Review this architecture for cost optimization
+```
+
+```bash CI/CD
+@devops/ci-cd-engineer Build a GitHub Actions workflow with matrix builds
+```
+</CodeGroup>
+
+## Quality Stats
+
+- **Average score**: 4.68/5
+- **7 Excellent, 2 Good** rating
+- **Total tokens**: ~11,000 (avg ~1,220 per agent)
+- **Coverage**: Full DevOps lifecycle
+
+## Common Workflows
+
+<Accordion title="DevOps Toolkit">
+  Complete infrastructure stack:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack devops
+  ```
+  
+  Includes: docker-specialist, kubernetes-specialist, terraform-specialist, aws-specialist, ci-cd-engineer, linux-admin, platform-engineer, incident-responder
+</Accordion>
+
+<Accordion title="Ship It Safely">
+  CI/CD + containers + reliability:
+  ```bash
+  npx github:dmicheneau/opencode-template-agent install --pack ship-it-safely
+  ```
+  
+  Includes: ci-cd-engineer, docker-specialist, kubernetes-specialist, sre-engineer, security-engineer, qa-expert
+</Accordion>
+
+<Accordion title="Container Orchestration">
+  1. **Docker Specialist** — Build optimized images
+  2. **Kubernetes Specialist** — Deploy to K8s
+  3. **Platform Engineer** — Set up developer platform
+  4. **SRE Engineer** — Define SLOs and monitoring
+</Accordion>
+
+## When to Use
+
+<Accordion title="Choose Docker Specialist when...">
+  - Writing Dockerfiles
+  - Optimizing image size
+  - Multi-stage builds
+  - Docker security hardening
+</Accordion>
+
+<Accordion title="Choose Kubernetes Specialist when...">
+  - Deploying to Kubernetes
+  - Writing Helm charts
+  - Debugging pod issues
+  - Cluster design and scaling
+</Accordion>
+
+<Accordion title="Choose Terraform Specialist when...">
+  - Writing infrastructure as code
+  - Managing Terraform state
+  - Creating reusable modules
+  - Multi-environment deployments
+</Accordion>
+
+<Accordion title="Choose AWS Specialist when...">
+  - Designing AWS architecture
+  - Cost optimization
+  - Well-Architected reviews
+  - AWS service selection
+</Accordion>
+
+<Accordion title="Choose CI/CD Engineer when...">
+  - Building CI/CD pipelines
+  - Setting up automated deployments
+  - Implementing testing strategies
+  - Optimizing build times
+</Accordion>
+
+<Accordion title="Choose Platform Engineer when...">
+  - Building internal developer platforms
+  - Implementing GitOps
+  - Creating golden paths
+  - Improving developer experience
+</Accordion>
+
+<Accordion title="Choose SRE Engineer when...">
+  - Defining SLOs and SLIs
+  - Implementing error budgets
+  - Setting up monitoring and alerting
+  - Building reliability practices
+</Accordion>
