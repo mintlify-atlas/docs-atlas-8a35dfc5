@@ -1,0 +1,125 @@
+{
+  "projectType": "cli-tool",
+  "projectName": "OpenCode Agents",
+  "projectDescription": "CLI and registry for installing curated AI agent templates into OpenCode projects",
+  "theme": "aspen",
+  "primaryColor": "#848c8e",
+  "lightColor": "#11161e",
+  "darkColor": "#cfd0d2",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "introduction",
+              "quickstart",
+              "installation"
+            ]
+          },
+          {
+            "group": "CLI Reference",
+            "pages": [
+              "cli/install",
+              "cli/list",
+              "cli/search",
+              "cli/uninstall",
+              "cli/update",
+              "cli/tui"
+            ]
+          },
+          {
+            "group": "Agent Catalog",
+            "pages": [
+              "agents/overview",
+              "agents/languages",
+              "agents/ai-ml",
+              "agents/web-mobile",
+              "agents/data-api",
+              "agents/devops",
+              "agents/devtools",
+              "agents/security",
+              "agents/mcp",
+              "agents/business",
+              "agents/docs"
+            ]
+          },
+          {
+            "group": "Packs",
+            "pages": [
+              "packs/overview",
+              "packs/backend",
+              "packs/frontend",
+              "packs/fullstack",
+              "packs/devops",
+              "packs/ai",
+              "packs/security"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "advanced/permissions",
+              "advanced/lock-system",
+              "advanced/quality-scoring",
+              "advanced/architecture"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "OpenCode Plugin",
+        "groups": [
+          {
+            "group": "Plugin",
+            "pages": [
+              "plugin/overview",
+              "plugin/installation",
+              "plugin/tools"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Contributing",
+        "groups": [
+          {
+            "group": "Development",
+            "pages": [
+              "contributing/overview",
+              "contributing/adding-agents",
+              "contributing/testing"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "69 curated AI agent templates across 10 categories",
+    "Interactive TUI browser for discovering agents",
+    "CLI commands for install, search, update, and uninstall",
+    "15 predefined packs for common tech stacks",
+    "OpenCode plugin with 4 LLM tools",
+    "Lock file system for integrity verification",
+    "Permission management with presets",
+    "Quality scoring system (8 dimensions, 1-5 scale)"
+  ],
+  "publicApiSurface": [
+    "opencode-agents install <agent>",
+    "opencode-agents install --pack <pack>",
+    "opencode-agents install --category <category>",
+    "opencode-agents list",
+    "opencode-agents search <query>",
+    "opencode-agents tui",
+    "opencode-agents update",
+    "opencode-agents verify",
+    "opencode-agents uninstall <agent>",
+    "Plugin: search_agents",
+    "Plugin: list_agents",
+    "Plugin: get_agent",
+    "Plugin: check_health"
+  ]
+}
