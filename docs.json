@@ -43,6 +43,8 @@
               "cli/search",
               "cli/uninstall",
               "cli/update",
+              "cli/verify",
+              "cli/rehash",
               "cli/tui"
             ]
           },

@@ -1,0 +1,189 @@
+---
+title: 'rehash'
+description: 'Rebuild lock file from current disk state'
+---
+
+## Overview
+
+The `rehash` command rebuilds `.opencode/agents/.manifest-lock.json` by scanning all installed agent files and recomputing their SHA-256 hashes. This trusts the current disk state as the new baseline.
+
+**Use this to**:
+- Accept manual edits as the new baseline
+- Recover from lock file corruption
+- Rebuild lock file after git pull/merge
+- Create lock file from pre-existing agents
+
+```bash
+npx github:dmicheneau/opencode-template-agent rehash
+```
+
+## How It Works
+
+1. **Scan disk** — Finds all `.md` files in `.opencode/agents/`
+2. **Compute hashes** — Calculates SHA-256 for each file
+3. **Match manifest** — Links files to agent entries in `manifest.json`
+4. **Write lock** — Overwrites `.manifest-lock.json` with new hashes
+5. **Report** — Shows count of rehashed agents
+
+## Example Usage
+
+### Basic rehash
+
+```bash
+npx github:dmicheneau/opencode-template-agent rehash
+```
+
+**Output**:
+```
+Lock file rebuilt from disk
+  ✓ 8 agent(s) rehashed
+```
+
+### After manual edits
+
+You edited `typescript-pro.md` to customize behavior:
+
+```bash
+# Verify detects mismatch
+npx github:dmicheneau/opencode-template-agent verify
+# Output: ✗ 1 agent(s) with hash mismatch
+
+# Accept the edit as new baseline
+npx github:dmicheneau/opencode-template-agent rehash
+# Output: ✓ 8 agent(s) rehashed
+
+# Verify now shows all OK
+npx github:dmicheneau/opencode-template-agent verify
+# Output: ✓ 8 agent(s) OK
+```
+
+### After git pull
+
+Team member committed agent updates to git:
+
+```bash
+git pull origin main
+# .opencode/agents/typescript-pro.md changed
+
+# Verify shows mismatch
+npx github:dmicheneau/opencode-template-agent verify
+# Output: ✗ 1 agent(s) with hash mismatch
+
+# Accept pulled changes
+npx github:dmicheneau/opencode-template-agent rehash
+# Output: ✓ 8 agent(s) rehashed
+```
+
+### Recover from lock file corruption
+
+If `.manifest-lock.json` was deleted or corrupted:
+
+```bash
+npx github:dmicheneau/opencode-template-agent rehash
+```
+
+This recreates the lock file from scratch based on currently installed agents.
+
+## Security Implications
+
+<Warning>
+  **Rehash trusts current disk state**
+  
+  If an agent was tampered with (malicious code injection, backdoor), running `rehash` makes that the **new trusted baseline**. Future `verify` commands will report the compromised version as "OK".
+  
+  **Best practice**: Only run `rehash` when you trust the current disk state:
+  - After your own manual edits
+  - After pulling from a trusted git source
+  - After reviewing changes with `git diff`
+  
+  **Never** run `rehash` blindly on agents from untrusted sources.
+</Warning>
+
+## When to Use
+
+<Accordion title="After manual customization">
+  You edited agent files to customize behavior for your project. Run `rehash` to make `verify` stop reporting mismatches.
+</Accordion>
+
+<Accordion title="After git operations">
+  After `git pull`, `git merge`, or `git checkout` that modifies agent files, run `rehash` to sync lock file with new state.
+</Accordion>
+
+<Accordion title="Recovering from lock file loss">
+  If `.manifest-lock.json` was deleted (e.g., not committed to git), run `rehash` to rebuild it from installed agents.
+</Accordion>
+
+<Accordion title="Permission changes">
+  After manually editing an agent's `permission:` block, run `rehash` to avoid false positives from `verify`.
+</Accordion>
+
+## What Gets Rehashed
+
+Rehash scans all `.md` files in `.opencode/agents/`:
+
+```
+.opencode/agents/
+  languages/
+    typescript-pro.md    → rehashed
+    python-pro.md        → rehashed
+  data-api/
+    postgres-pro.md      → rehashed
+  .manifest-lock.json    ← overwritten
+```
+
+**Agents not in `manifest.json` are ignored** — rehash only processes agents that exist in the upstream registry.
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | Lock file rebuilt successfully |
+
+Rehash never fails — even with 0 agents installed, it creates an empty lock file.
+
+## Alternatives
+
+Instead of `rehash`, you can:
+
+1. **Reinstall with --force** — Downloads fresh copies and updates lock:
+   ```bash
+   npx github:dmicheneau/opencode-template-agent install --all --force
+   ```
+
+2. **Use update** — Reinstalls only agents with hash mismatches:
+   ```bash
+   npx github:dmicheneau/opencode-template-agent update
+   ```
+
+Use `rehash` when you **want to keep** current modifications. Use `install --force` or `update` when you want to **restore** upstream versions.
+
+## Related Commands
+
+- [verify](/cli/verify) — Check lock file integrity
+- [update](/cli/update) — Reinstall agents with hash mismatches
+- [install](/cli/install) — Install/reinstall agents
+
+## Lock File Format
+
+After rehash, `.manifest-lock.json` contains:
+
+```json
+{
+  "version": "1.0.0",
+  "agents": {
+    "typescript-pro": {
+      "name": "typescript-pro",
+      "category": "languages",
+      "sha256": "91a7228f884f61f576559d4596984a0fafc5a29b631e1f469d7915f5bc322a5b",
+      "installed_at": "2024-03-05T10:23:45.678Z"
+    }
+  }
+}
+```
+
+The `sha256` field is what `verify` checks against.
+
+## See Also
+
+- [Lock System](/advanced/lock-system) — Deep dive into lock file architecture
+- [Permissions](/advanced/permissions) — How permission modifications affect hashes

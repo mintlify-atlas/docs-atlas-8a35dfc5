@@ -1,0 +1,183 @@
+---
+title: 'verify'
+description: 'Check lock file integrity and detect modified agents'
+---
+
+## Overview
+
+The `verify` command checks the integrity of installed agents by comparing their current file hashes against the SHA-256 hashes stored in `.opencode/agents/.manifest-lock.json`.
+
+**Use this to**:
+- Detect manual edits to agent files
+- Identify corrupted or tampered agents
+- Audit agent integrity before deployment
+- Verify installation completeness
+
+```bash
+npx github:dmicheneau/opencode-template-agent verify
+```
+
+## How It Works
+
+1. **Load lock file** — Reads `.opencode/agents/.manifest-lock.json`
+2. **Hash installed files** — Computes SHA-256 for each agent's `.md` file
+3. **Compare** — Matches current hash against lock file hash
+4. **Report** — Categorizes each agent as OK, mismatch, or missing
+
+## Output States
+
+### ✓ OK
+Agent file exists and hash matches the lock file entry.
+
+### ✗ Hash Mismatch
+Agent file exists but hash differs from the lock file. This indicates:
+- Manual edits to the agent file
+- Corruption
+- Permission modifications (if applied after initial install)
+
+### ⚠ Missing
+Agent is recorded in lock file but file doesn't exist on disk.
+
+## Example Usage
+
+### Basic integrity check
+
+```bash
+npx github:dmicheneau/opencode-template-agent verify
+```
+
+**Output**:
+```
+Lock integrity verification
+  ✓ 8 agent(s) OK
+    • typescript-pro
+    • postgres-pro
+    • redis-specialist
+    • api-architect
+    • python-pro
+    • debugger
+    • test-automator
+    • database-architect
+```
+
+### Detecting modified agents
+
+After manually editing `typescript-pro.md`:
+
+```bash
+npx github:dmicheneau/opencode-template-agent verify
+```
+
+**Output**:
+```
+Lock integrity verification
+  ✓ 7 agent(s) OK
+    • postgres-pro
+    • redis-specialist
+    • api-architect
+    • python-pro
+    • debugger
+    • test-automator
+    • database-architect
+  ✗ 1 agent(s) with hash mismatch
+    • typescript-pro
+```
+
+### Missing agents
+
+If an agent file was deleted:
+
+```bash
+npx github:dmicheneau/opencode-template-agent verify
+```
+
+**Output**:
+```
+Lock integrity verification
+  ✓ 7 agent(s) OK
+    • typescript-pro
+    • postgres-pro
+    • redis-specialist
+    • api-architect
+    • debugger
+    • test-automator
+    • database-architect
+  ⚠ 1 agent(s) missing from disk
+    • python-pro
+```
+
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0` | All agents OK (or no lock entries) |
+| `1` | Hash mismatches or missing agents detected |
+
+Use exit codes in CI/CD pipelines:
+
+```bash
+#!/bin/bash
+npx github:dmicheneau/opencode-template-agent verify
+if [ $? -ne 0 ]; then
+  echo "❌ Agent integrity check failed"
+  exit 1
+fi
+echo "✓ All agents verified"
+```
+
+## Relationship with Permissions
+
+**Important**: Hash verification runs **after** permission modifications. If you install an agent with custom permissions (`--permissions`, `--permission-override`), the lock file stores the hash of the **modified** file, not the upstream original.
+
+This means:
+- ✅ Installing with `--permissions strict` and verifying = OK (hash matches modified version)
+- ⚠ Installing normally, then manually changing permissions = hash mismatch
+
+If you need to change permissions after installation, use `install --force` with the new permission flags, or run `rehash` to accept current disk state as the new baseline.
+
+## When to Use
+
+<Accordion title="Daily development">
+  Run `verify` periodically to ensure no accidental edits to agent files.
+</Accordion>
+
+<Accordion title="Before deployment">
+  Verify agent integrity before deploying to production environments.
+</Accordion>
+
+<Accordion title="After git pull">
+  If multiple team members share agents via git, verify after pulling changes.
+</Accordion>
+
+<Accordion title="Security audits">
+  Check for tampering or unauthorized modifications to agent system prompts.
+</Accordion>
+
+## Related Commands
+
+- [update](/cli/update) — Reinstall agents with hash mismatches
+- [rehash](/cli/rehash) — Rebuild lock file from current disk state
+- [install](/cli/install) — Install agents with permission modifications
+
+## Troubleshooting
+
+<Warning>
+  **"No lock entries found"**
+  
+  You haven't installed any agents yet, or `.opencode/agents/.manifest-lock.json` was deleted.
+  
+  **Solution**: Install agents first, or run `rehash` to rebuild the lock from existing files.
+</Warning>
+
+<Warning>
+  **False positives after permission changes**
+  
+  If you installed an agent, then manually edited its `permission:` block, verify will report a hash mismatch.
+  
+  **Solution**: Run `rehash` to accept the current state as baseline, or reinstall with `install --force` and the desired permission flags.
+</Warning>
+
+## See Also
+
+- [Lock System](/advanced/lock-system) — Deep dive into lock file format and integrity verification
+- [Permissions](/advanced/permissions) — Understanding permission modifications and their impact on hashes
